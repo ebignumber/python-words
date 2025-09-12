@@ -1,0 +1,32 @@
+{
+    "PANTS": {
+        "direction": "r",
+        "x": 3,
+        "y": 3
+    },
+    "PAINT": {
+        "direction": "d",
+        "x": 3,
+        "y": 3
+    },
+    "TAN": {
+        "direction": "r",
+        "x": 3,
+        "y": 7
+    },
+    "TIN": {
+        "direction": "r",
+        "x": 2,
+        "y": 5
+    },
+    "TIP": {
+        "direction": "d",
+        "x": 6,
+        "y": 3
+    },
+    "TAPS": {
+        "direction": "d",
+        "x": 7,
+        "y": 0
+    }
+}

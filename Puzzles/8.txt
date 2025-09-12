@@ -1,1 +1,0 @@
-r:5:5:TRANSLATE d:6:5:RATE r:5:8:EEL d:9:5:SALE d:12:1:RAT

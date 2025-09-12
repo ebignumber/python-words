@@ -1,0 +1,27 @@
+{
+    "ARABIC": {
+        "direction": "r",
+        "x": 2,
+        "y": 2
+    },
+    "BRA": {
+        "direction": "d",
+        "x": 2,
+        "y": 0
+    },
+    "BRICK": {
+        "direction": "d",
+        "x": 5,
+        "y": 2
+    },
+    "CAR": {
+        "direction": "d",
+        "x": 7,
+        "y": 2
+    },
+    "CAB": {
+        "direction": "r",
+        "x": 12,
+        "y": 2
+    }
+}

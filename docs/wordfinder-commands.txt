@@ -1,0 +1,9 @@
+COMMANDS:
+/compact: Merges letters in the letters list to shorten it
+/easy: Makes it so that the letters in the letters list only contains letters in the words that haven't been guessed
+/expand: Expands the letter list: (2E) becomes two E's in the list
+/exit: Exits the program
+/hint: Adds a hint to the puzzle, making a certain word easier to guess
+/normal: Returns to the normal difficulty of the game
+/reset: Resets the puzzle
+/shuffle: Shuffles the letters list around

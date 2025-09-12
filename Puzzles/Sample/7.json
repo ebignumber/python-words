@@ -1,0 +1,32 @@
+{
+    "ELEPHANT": {
+        "direction": "r",
+        "x": 0,
+        "y": 0
+    },
+    "PEE": {
+        "direction": "r",
+        "x": 0,
+        "y": 2
+    },
+    "HEAT": {
+        "direction": "r",
+        "x": 0,
+        "y": 4
+    },
+    "HAT": {
+        "direction": "r",
+        "x": 0,
+        "y": 6
+    },
+    "PANE": {
+        "direction": "r",
+        "x": 0,
+        "y": 10
+    },
+    "HEAL": {
+        "direction": "r",
+        "x": 0,
+        "y": 12
+    }
+}

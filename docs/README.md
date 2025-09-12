@@ -17,13 +17,14 @@ This game requires Python; I made this using Python 3.12.3, and it will likely w
 
 Once you run the wordfinder.py file you will be greeted with this screen:
 
-    Do you want to play a custom level or select a numbered lever?
-    c. Custom Level
-    s. Sample Level
+    1: Sample
+    2: Custom
+    Select a series you want to play:
 
-Type s, to play sample puzzles, and c if you want to play custom puzzles. After that, type a number or the name of the puzzle to play it.
 
-Next, you will see a screen like this:
+you may not see the Custom option when you first use it, since this option only appears when you make a puzzle in that directory.
+
+Next, you enter the puzzle number you want to play. This will lead you to a screen like this one:
 
        #       
        #         
@@ -48,4 +49,37 @@ On the top of the screen, you will see the puzzle that you need to solve. Below 
 
 ## How can I create a puzzle?
 
-You have two ways of doing this. You can make a text file with the necessary data and put it in the Custom-Puzzles directory or use the puzzle creator named "puzzle-creator.py".
+Open a file named "puzzle-creator.py" and start work.
+
+When you first start, you will be greeted by this screen:
+
+    Type "help" for help
+
+    puzzle_creator/Custom$ 
+
+Here you type commands to make puzzles and write them to files. The data is stored in .json files once you save it.
+
+## How are my puzzles stored?
+
+sample puzzle data will look something like this:
+
+    {
+        "CAT": {
+            "direction": "r",
+            "x": 6,
+            "y": 6
+        },
+        "ACT": {
+            "direction": "r",
+            "x": 6,
+            "y": 8
+        },
+        "AT": {
+            "direction": "r",
+            "x": 6,
+            "y": 4
+        }
+    }
+
+Here we can see that words, coordinates, and direction are shown. The keys in the puzzle object is a word, and the object assigned to the keys give the direction, x, and y coordinates.
+

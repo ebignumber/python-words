@@ -1,1 +1,0 @@
-r:2:2:ARABIC d:2:0:BRA d:5:2:BRICK d:7:2:CAR r:12:2:CAB

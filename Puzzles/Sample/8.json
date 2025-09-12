@@ -1,0 +1,27 @@
+{
+    "TRANSLATE": {
+        "direction": "r",
+        "x": 5,
+        "y": 5
+    },
+    "RATE": {
+        "direction": "d",
+        "x": 6,
+        "y": 5
+    },
+    "EEL": {
+        "direction": "r",
+        "x": 5,
+        "y": 8
+    },
+    "SALE": {
+        "direction": "d",
+        "x": 9,
+        "y": 5
+    },
+    "RAT": {
+        "direction": "d",
+        "x": 12,
+        "y": 1
+    }
+}

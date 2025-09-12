@@ -1,0 +1,27 @@
+{
+    "PHONE": {
+        "direction": "d",
+        "x": 5,
+        "y": 5
+    },
+    "PEN": {
+        "direction": "r",
+        "x": 5,
+        "y": 5
+    },
+    "ONE": {
+        "direction": "r",
+        "x": 5,
+        "y": 7
+    },
+    "HEN": {
+        "direction": "r",
+        "x": 4,
+        "y": 9
+    },
+    "NO": {
+        "direction": "d",
+        "x": 6,
+        "y": 9
+    }
+}

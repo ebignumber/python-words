@@ -1,0 +1,32 @@
+{
+    "GRAINS": {
+        "direction": "r",
+        "x": 2,
+        "y": 2
+    },
+    "GRANTS": {
+        "direction": "d",
+        "x": 2,
+        "y": 2
+    },
+    "STAR": {
+        "direction": "r",
+        "x": 2,
+        "y": 7
+    },
+    "RANT": {
+        "direction": "d",
+        "x": 5,
+        "y": 7
+    },
+    "SAG": {
+        "direction": "d",
+        "x": 7,
+        "y": 2
+    },
+    "TAG": {
+        "direction": "r",
+        "x": 5,
+        "y": 4
+    }
+}

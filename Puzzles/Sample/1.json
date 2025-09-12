@@ -1,0 +1,17 @@
+{
+    "HELLO": {
+        "direction": "r",
+        "x": 0,
+        "y": 0
+    },
+    "HOLE": {
+        "direction": "r",
+        "x": 0,
+        "y": 2
+    },
+    "HOE": {
+        "direction": "r",
+        "x": 0,
+        "y": 4
+    }
+}

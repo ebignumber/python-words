@@ -1,1 +1,0 @@
-r:2:2:GRAINS d:2:2:GRANTS r:2:7:STAR d:5:7:RANT d:7:2:SAG r:5:4:TAG

@@ -1,0 +1,22 @@
+{
+    "HAPPY": {
+        "direction": "r",
+        "x": 1,
+        "y": 1
+    },
+    "PAY": {
+        "direction": "d",
+        "x": 2,
+        "y": 0
+    },
+    "YAP": {
+        "direction": "d",
+        "x": 5,
+        "y": 1
+    },
+    "APP": {
+        "direction": "r",
+        "x": 5,
+        "y": 2
+    }
+}

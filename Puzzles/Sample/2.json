@@ -1,0 +1,32 @@
+{
+    "DODGE": {
+        "direction": "r",
+        "x": 3,
+        "y": 3
+    },
+    "EGO": {
+        "direction": "d",
+        "x": 7,
+        "y": 3
+    },
+    "ODD": {
+        "direction": "d",
+        "x": 4,
+        "y": 3
+    },
+    "DOG": {
+        "direction": "d",
+        "x": 6,
+        "y": 1
+    },
+    "GO": {
+        "direction": "r",
+        "x": 7,
+        "y": 4
+    },
+    "DO": {
+        "direction": "r",
+        "x": 4,
+        "y": 5
+    }
+}
