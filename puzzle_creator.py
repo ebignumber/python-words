@@ -1,5 +1,6 @@
 import os
 puzzle_creation = []
+autodisplay = False
 
 #creates 15 by 15 block
 def reset_list():
@@ -112,12 +113,33 @@ def read_command(command):
                 add_word(command[1])
             except:
                 print('You need to add an argument to this command')
+        case 'autodisplay':
+            global autodisplay
+            autodisplay = ~autodisplay
         case 'display':
             display_puzzle()
         case 'exit':
             exit()
         case 'help':
-            print('\nHELP\n\nadd. Syntax: add "direction":"x":"y":"word" | Adds a word to the puzzle\ndisplay. Syntax: display | displays the puzzle and the words in it.\nexit. Syntax: exit. | exits the program\nhelp. Syntax: help | prints this help\nload Syntax: load "name" | loads a puzzle to edit\nrm. Syntax: rm "word" | remove a word from the puzzle\nsave. Syntax: save "name" saves the puzzle with a name that doesn\'t contain whitespaces')
+            print('''
+HELP
+
+add. Syntax: add "direction":"x":"y":"word" | Adds a word to the puzzle
+
+autodisplay. Syntax: autodisplay | toggles the autodisplay setting
+
+display. Syntax: display | displays the puzzle and the words in it.
+
+exit. Syntax: exit. | exits the program
+
+help. Syntax: help | prints this help
+
+load Syntax: load "name" | loads a puzzle to edit
+
+rm. Syntax: rm "word" | remove a word from the puzzle
+
+save. Syntax: save "name" saves the puzzle with a name that doesn\'t contain whitespaces
+                  ''')
         case 'load':
             try:
                 load_puzzle(command[1])
@@ -132,6 +154,11 @@ def read_command(command):
                 print('You need to add an argument to this command')
         case _:
             print(f'Could not find command {command}')
+  
+  #runs display puzzle function if autodisplay is on
+    if autodisplay:
+        display_puzzle()
+
 
 #Allows user to input commands
 print('Type "help" for help')
