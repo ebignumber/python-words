@@ -138,7 +138,7 @@ def read_command(command):
                 print('You need to add an argument to this command')
         case 'autodisplay':
             global autodisplay
-            autodisplay = ~autodisplay
+            autodisplay = not autodisplay
         case 'display':
             display_puzzle()
         case 'exit':
