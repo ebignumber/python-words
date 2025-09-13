@@ -7,6 +7,8 @@ autodisplay = False
 help_string = '''
 add. Syntax: add "direction":"x":"y":"word" | Adds a word to the puzzle
 
+addword. Syntax: addword "word" | Adds a word to the puzzle at position 0,0 going right
+
 autodisplay. Syntax: autodisplay | toggles the autodisplay setting
 
 display. Syntax: display | displays the puzzle and the words in it.
@@ -17,11 +19,17 @@ help. Syntax: help | prints this help
 
 load Syntax: load "name" | loads a puzzle to edit
 
+mv. Syntax: move "word" "x" "y" | moves a word in the puzzle
+
 rm. Syntax: rm "word" | remove a word from the puzzle
+
+reset. Syntax: reset | resets the puzzle and removes all words from it
 
 rotate. Syntax: rotate "word" | rotates a word in the puzzle
 
 save. Syntax: save "name" saves the puzzle with a name that doesn\'t contain whitespaces
+
+shift. Syntax: shift "word" "x" "y" | moves a word by x and y coordinates
 '''
 
 #creates 15 by 15 block
@@ -96,6 +104,33 @@ def add_word(word):
     word_test[3] = word_test[3].upper()
     puzzle_creation.append(':'.join(word_test))
 
+def move_word(word, x, y):
+    try:
+        int(x)
+        int(y)
+    except:
+        print("x and y coordinates must be integers")
+        return
+    if int(x) < 0 or int(x) > 14:
+        print("x coordinate must be between 0 and 14")
+        return
+    elif int(y) < 0 or int(y) > 14:
+        print('y coordinate must be between 0 and 14')
+        return
+    for index, i in enumerate(puzzle_creation):
+        i = i.split(':')
+        if word.upper() == i[3]:
+            #test if word is out of bounds if moved
+            if (len(i[3]) + int(x) - 1 > 14 and i[0] == 'r') or (len(i[3]) + int(y) - 1 > 14 and i[0] == 'd'):
+                print(f'Could not move {word}, it would go out of bounds')
+                return
+            #moves the word
+            i[1] = x
+            i[2] = y
+            puzzle_creation[index] = ':'.join(i)
+            return
+    print(f'Could not find the word to move {word}')
+
 def rotate_word(word):
     for index, i in enumerate(puzzle_creation):
         i = i.split(':')
@@ -112,6 +147,8 @@ def rotate_word(word):
             puzzle_creation[index] = ':'.join(i)
             return
     print(f'Could not find the word to rotate {word}')
+
+
 
 def remove_word(word):
     for index, i in enumerate(puzzle_creation):
@@ -134,6 +171,10 @@ def save_puzzle(name):
                 f.write(' '.join(puzzle_creation))
                 print(f'Puzzle {name} was overwritten')
 
+#Shifts a word coordinate by a certain amount
+def shift_word(word, x, y):
+    move_word(word, str(int(x) + int(x)), str(int(y) + int(y)))
+
 #Loads a puzzle with a name
 def load_puzzle(name):
     try:
@@ -155,6 +196,9 @@ def read_command(command):
                 add_word(command[1])
             except:
                 print('You need to add an argument to this command')
+        case 'addword':
+            try: add_word(f'r:0:0:{command[1]}')
+            except: print('You need to add an argument to this command')
         case 'autodisplay':
             global autodisplay
             autodisplay = not autodisplay
@@ -169,8 +213,16 @@ def read_command(command):
                 load_puzzle(command[1])
             except:
                 print('You need to add an argument to this command')
+        case 'mv':
+            try:
+                move_word(command[1], command[2], command[3])
+            except:
+                print('You need to add 3 arguments to this command')
         case 'rm':
             remove_word(command[1])
+        case 'reset':
+            global puzzle_creation
+            puzzle_creation = []
         case 'rotate':
             rotate_word(command[1])
         case 'save':
@@ -178,6 +230,11 @@ def read_command(command):
                 save_puzzle(command[1])
             except:
                 print('You need to add an argument to this command')
+        case 'shift':
+            try:
+                shift_word(command[1], command[2], command[3])
+            except:
+                print('You need to add 3 arguments to this command')
         case _:
             print(f'Could not find command {command}')
   
