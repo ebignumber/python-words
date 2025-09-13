@@ -19,6 +19,8 @@ load Syntax: load "name" | loads a puzzle to edit
 
 rm. Syntax: rm "word" | remove a word from the puzzle
 
+rotate. Syntax: rotate "word" | rotates a word in the puzzle
+
 save. Syntax: save "name" saves the puzzle with a name that doesn\'t contain whitespaces
 '''
 
@@ -94,6 +96,23 @@ def add_word(word):
     word_test[3] = word_test[3].upper()
     puzzle_creation.append(':'.join(word_test))
 
+def rotate_word(word):
+    for index, i in enumerate(puzzle_creation):
+        i = i.split(':')
+        if word.upper() == i[3]:
+            #test if word is out of bounds if rotated
+            if (len(i[3]) + int(i[1]) - 1 > 14 and i[0] == 'd') or (len(i[3]) + int(i[2]) - 1 > 14 and i[0] == 'r'):
+                print(f'Could not rotate {word}, it would go out of bounds')
+                return
+            #rotates the word
+            if i[0] == 'r':
+                i[0] = 'd'
+            else:
+                i[0] = 'r'
+            puzzle_creation[index] = ':'.join(i)
+            return
+    print(f'Could not find the word to rotate {word}')
+
 def remove_word(word):
     for index, i in enumerate(puzzle_creation):
         i = i.split(':')
@@ -152,6 +171,8 @@ def read_command(command):
                 print('You need to add an argument to this command')
         case 'rm':
             remove_word(command[1])
+        case 'rotate':
+            rotate_word(command[1])
         case 'save':
             try:
                 save_puzzle(command[1])
