@@ -2,6 +2,26 @@ import os
 puzzle_creation = []
 autodisplay = False
 
+#Help string
+
+help_string = '''
+add. Syntax: add "direction":"x":"y":"word" | Adds a word to the puzzle
+
+autodisplay. Syntax: autodisplay | toggles the autodisplay setting
+
+display. Syntax: display | displays the puzzle and the words in it.
+
+exit. Syntax: exit. | exits the program
+
+help. Syntax: help | prints this help
+
+load Syntax: load "name" | loads a puzzle to edit
+
+rm. Syntax: rm "word" | remove a word from the puzzle
+
+save. Syntax: save "name" saves the puzzle with a name that doesn\'t contain whitespaces
+'''
+
 #creates 15 by 15 block
 def reset_list():
     global my_list
@@ -101,6 +121,9 @@ def load_puzzle(name):
         with open(f'Custom-Puzzles{os.path.sep}{name}.txt', 'r') as f:
             global puzzle_creation
             puzzle_creation = f.read().split(' ')
+            #Removes \n from puzzles if present
+            if puzzle_creation[-1].find('\n'):
+                puzzle_creation[-1] = puzzle_creation[-1][0:-1]
     except:
         print(f'Puzzle {name} doesn\'t exist')
 
@@ -121,25 +144,7 @@ def read_command(command):
         case 'exit':
             exit()
         case 'help':
-            print('''
-HELP
-
-add. Syntax: add "direction":"x":"y":"word" | Adds a word to the puzzle
-
-autodisplay. Syntax: autodisplay | toggles the autodisplay setting
-
-display. Syntax: display | displays the puzzle and the words in it.
-
-exit. Syntax: exit. | exits the program
-
-help. Syntax: help | prints this help
-
-load Syntax: load "name" | loads a puzzle to edit
-
-rm. Syntax: rm "word" | remove a word from the puzzle
-
-save. Syntax: save "name" saves the puzzle with a name that doesn\'t contain whitespaces
-                  ''')
+            print(help_string)
         case 'load':
             try:
                 load_puzzle(command[1])
