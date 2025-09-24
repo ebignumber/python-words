@@ -1,7 +1,6 @@
 import os
 has_played_a_round = False
-
-#reads input as 'n' or 'c' from player
+#reads input as 's' or 'c' from player
 while True:
     if not has_played_a_round:
         print('Do you want to play a custom level or select a numbered lever?\nc. Custom Level\ns. Sample Level\n')

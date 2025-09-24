@@ -1,7 +1,7 @@
 import os
 puzzle_creation = []
 autodisplay = False
-
+series = "Sample"
 #Help string
 
 help_string = '''
@@ -36,15 +36,13 @@ shift. Syntax: shift "word" "x" "y" | moves a word by x and y coordinates
 def reset_list():
     global my_list
     my_list = []
-    n = 15
-    while n > 0:
+    for i in range(15):
         my_list.append([])
-        x = 15
-        while x > 0:
-            my_list[15 - n].append(' ')
-            x -= 1
-        n -= 1
+        for j in range(15):
+            my_list[i].append(' ')
 reset_list()
+
+
 
 #Prints words to the my_list variable
 def print_word_to_puzzle(opt, x, y, w):
@@ -60,10 +58,8 @@ def display_puzzle():
     for i in puzzle_creation:
         i = i.split(':')
         print_word_to_puzzle(i[0], int(i[1]), int(i[2]), i[3])
-    n = 15
-    while n > 0:
-        print(f"{''.join(my_list[15 - n])}{15 - n}")
-        n -= 1
+    for j in range(15):
+        print(f"{''.join(my_list[j])}{j}")
     print('012345678901234')
     reset_list()
     print(f'words: {puzzle_creation}\n')
@@ -230,6 +226,8 @@ def read_command(command):
                 save_puzzle(command[1])
             except:
                 print('You need to add an argument to this command')
+        case 'series':
+            change_series()
         case 'shift':
             try:
                 shift_word(command[1], command[2], command[3])
@@ -246,5 +244,5 @@ def read_command(command):
 #Allows user to input commands
 print('Type "help" for help')
 while True:
-    command = input("\npuzzle_creator$ ")
+    command = input(f"\npuzzle_creator/{series}$ ")
     read_command(command)
