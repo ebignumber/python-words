@@ -1,25 +1,28 @@
 import os
 puzzle_creation = []
 autodisplay = False
-series = "Sample"
+series = "Custom"
+puzzle_path = f'Puzzles{os.path.sep}{series}'
 #Help string
 
 help_string = '''
 add. Syntax: add "direction":"x":"y":"word" | Adds a word to the puzzle
 
-addword. Syntax: addword "word" | Adds a word to the puzzle at position 0,0 going right
+add_word. Syntax: add_word "word" | Adds a word to the puzzle at position 0,0 going right
 
 autodisplay. Syntax: autodisplay | toggles the autodisplay setting
 
 display. Syntax: display | displays the puzzle and the words in it.
 
+delete. Syntax: delete "puzzle number" | deletes a puzzle in the series you are editing
+
 exit. Syntax: exit. | exits the program
 
 help. Syntax: help | prints this help
 
-load Syntax: load "name" | loads a puzzle to edit
+load Syntax: load "puzzle number" | loads a puzzle to edit
 
-mv. Syntax: move "word" "x" "y" | moves a word in the puzzle
+mv. Syntax: mv "word" "x" "y" | moves a word in the puzzle
 
 rm. Syntax: rm "word" | remove a word from the puzzle
 
@@ -27,7 +30,11 @@ reset. Syntax: reset | resets the puzzle and removes all words from it
 
 rotate. Syntax: rotate "word" | rotates a word in the puzzle
 
-save. Syntax: save "name" saves the puzzle with a name that doesn\'t contain whitespaces
+save. Syntax: save | saves the puzzle as the final end level
+
+save_as. Syntax save "puzzle number" | overwrites a puzzle with the number given with the current puzzle 
+
+series. Syntax series "series" | moves to a new series to edit puzzles in that series
 
 shift. Syntax: shift "word" "x" "y" | moves a word by x and y coordinates
 '''
@@ -64,6 +71,57 @@ def display_puzzle():
     reset_list()
     print(f'words: {puzzle_creation}\n')
 
+def change_series(new_series):
+    global series
+    series = new_series
+    global puzzle_path
+    puzzle_path = f'Puzzles{os.path.sep}{series}'
+    try: print(f'Changed series to {new_series}!\nPuzzles: {len(os.listdir(puzzle_path))}')
+    except: print(f'NEW SERIES\n\nChanged series to {new_series}!\nPuzzles: 0')
+
+def delete_puzzle(puzzle_number):
+    try: puzzle_number = int(puzzle_number)
+    except: print('the argument must be an integer')
+    try: os.remove(f'{puzzle_path}{os.path.sep}{puzzle_number}.txt')
+    except: 
+        print("puzzle does not exist!")
+        return
+    puzzles = os.listdir(puzzle_path)
+    n = puzzle_number
+    while n <= len(puzzles):
+        try: os.rename(f'{puzzle_path}{os.path.sep}{n + 1}.txt', f'{puzzle_path}{os.path.sep}{n}.txt')
+        except: print(f"an error occurred: could not find puzzle {n + 1} in {series}\nPlease make sure that all the puzzles in the series are integers and that no numbers are missing") 
+        n += 1
+
+def move_puzzle(puzzle_number, location):
+    try: 
+        puzzle_number = int(puzzle_number)
+        location = int(location)
+    except: print('the arguments must be integers')
+    try: os.rename(f'{puzzle_path}{os.path.sep}{puzzle_number}.txt', f'{puzzle_path}{os.path.sep}moving.txt')
+    except: 
+        print("puzzle does not exist!")
+        return
+    puzzles = os.listdir(puzzle_path)
+    if location > len(puzzles):
+        print("move puzzle to that location. location out of bounds")
+    #Renames puzzles in front of puzzle
+    i = puzzle_number
+    while i < len(puzzles):
+        try: os.rename(f'{puzzle_path}{os.path.sep}{i + 1}.txt', f'{puzzle_path}{os.path.sep}{i}.txt')
+        except: print(f"an error occurred: could not find puzzle {i + 1} in {series}\nPlease make sure that all the puzzles in the series are integers and that no numbers are missing") 
+        i += 1
+    #Renames puzzles in front of new puzzle location
+    n = len(puzzles) - 1
+    while n >= location:
+        print(os.listdir(puzzle_path))
+        try: os.rename(f'{puzzle_path}{os.path.sep}{n}.txt', f'{puzzle_path}{os.path.sep}{n + 1}.txt')
+        except: print(f"an error occurred: could not find puzzle {n} in {series}\nPlease make sure that all the puzzles in the series are integers and that no numbers are missing") 
+        n -= 1
+    try: os.rename(f'{puzzle_path}{os.path.sep}moving.txt', f'{puzzle_path}{os.path.sep}{location}.txt')
+    except: print("ERROR")
+
+    
 #Checks the word for issues, then, if successful, adds it to puzzle_creation variable
 def add_word(word):
     word_test = word.split(':')
@@ -155,17 +213,27 @@ def remove_word(word):
     print(f'Could not find the word to {word}')
 
 #Saves the puzzle with a name and offers to overwrite it if a puzzle with that name.  
-def save_puzzle(name):
+def save_puzzle(puzzle_integer):
+    try: os.listdir(puzzle_path)
+    except: os.mkdir(puzzle_path)
+
     try:
-        with open(f'Custom-Puzzles{os.path.sep}{name}.txt', 'x') as f:
+        if len(os.listdir(puzzle_path)) + 1 < int(puzzle_integer):
+            print("The integer is too big!, try just save instead")
+            return
+    except:
+        print("the puzzle needs to be saved as an integer")
+        return
+    try:
+        with open(f'{puzzle_path}{os.path.sep}{puzzle_integer}.txt', 'x') as f:
             f.write(' '.join(puzzle_creation))
-            print(f'Successfully created {name}')
+            print(f'Successfully created {puzzle_integer}')
     except:
         overwrite = input('That puzzle already exists, would you like to overwrite it? y/yes\n')
         if overwrite.lower() == 'y':
-            with open(f'Custom-Puzzles{os.path.sep}{name}.txt', 'w') as f:
+            with open(f'{puzzle_path}{os.path.sep}{puzzle_integer}.txt', 'w') as f:
                 f.write(' '.join(puzzle_creation))
-                print(f'Puzzle {name} was overwritten')
+                print(f'Puzzle {puzzle_integer} was overwritten')
 
 #Shifts a word coordinate by a certain amount
 def shift_word(word, x, y):
@@ -174,7 +242,7 @@ def shift_word(word, x, y):
 #Loads a puzzle with a name
 def load_puzzle(name):
     try:
-        with open(f'Custom-Puzzles{os.path.sep}{name}.txt', 'r') as f:
+        with open(f'Puzzles{os.path.sep}{series}{os.path.sep}{name}.txt', 'r') as f:
             global puzzle_creation
             puzzle_creation = f.read().split(' ')
             #Removes \n from puzzles if present
@@ -192,12 +260,15 @@ def read_command(command):
                 add_word(command[1])
             except:
                 print('You need to add an argument to this command')
-        case 'addword':
+        case 'add_word':
             try: add_word(f'r:0:0:{command[1]}')
             except: print('You need to add an argument to this command')
         case 'autodisplay':
             global autodisplay
             autodisplay = not autodisplay
+        case 'delete':
+            try: delete_puzzle(command[1])
+            except: print('this command needs 1 argument')
         case 'display':
             display_puzzle()
         case 'exit':
@@ -214,6 +285,9 @@ def read_command(command):
                 move_word(command[1], command[2], command[3])
             except:
                 print('You need to add 3 arguments to this command')
+        case 'move_puzzle':
+            try: move_puzzle(command[1], command[2])
+            except: print('You need to add 2 arguments to this command')
         case 'rm':
             remove_word(command[1])
         case 'reset':
@@ -223,11 +297,16 @@ def read_command(command):
             rotate_word(command[1])
         case 'save':
             try:
+                save_puzzle(len(os.listdir(puzzle_path)) + 1 )
+            except:
+                save_puzzle(1)
+        case 'save_as':
+            try:
                 save_puzzle(command[1])
             except:
-                print('You need to add an argument to this command')
+                print('could not save puzzle')
         case 'series':
-            change_series()
+            change_series(command[1])
         case 'shift':
             try:
                 shift_word(command[1], command[2], command[3])

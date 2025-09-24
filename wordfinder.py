@@ -1,22 +1,23 @@
 import os
 has_played_a_round = False
+series = 'Sample'
 #reads input as 's' or 'c' from player
 while True:
     if not has_played_a_round:
-        print('Do you want to play a custom level or select a numbered lever?\nc. Custom Level\ns. Sample Level\n')
-        response = input('')
-    if response in 'sc' and response.isalpha() and len(response) == 1:
+        print('Select a series you want to play:\n')
+        series = input('')
+    if series.isalpha():  # Replace this with something that looks for the series
         break
     else: print('Invalid Response')
 
 
 #Select the puzzle
-def select_puzzle():
+def select_puzzle(): #This function needs to be updated
     global puzzle_number
 
     #reads puzzle_number
-    if response == 's' and not has_played_a_round:
-        while True:
+    if not has_played_a_round: 
+        while True: 
             try:
                 puzzle_number = int(input('Enter a puzzle number: '))
                 if puzzle_number < 1 or puzzle_number > 10:
@@ -27,19 +28,8 @@ def select_puzzle():
                     break
             except:
                 print('not a number')
-    elif response == 's' and has_played_a_round:
-        puzzle_number += 1
     else:
-        while True:
-            if response == 'c':
-                try:
-                    puzzle_number = input('Enter the name of your puzzle: ')
-                    with open(f'Custom-Puzzles{os.path.sep}{puzzle_number}.txt', 'r') as f:
-                        c_or_n = 'Custom-Puzzles'
-                        break
-                except:
-                    print(f'Puzzle {puzzle_number} not found!')
-                    exit()
+        puzzle_number += 1
 
 select_puzzle()
 #converts puzzle to a list of lists
@@ -68,13 +58,9 @@ def add_word_to_puzzle(opt, x, y, w, word_found):
             else:
                 puzzle_list[index + y][x] = i
       
-    n = 15
-    while n > 0:
-        n -= 1
-
 #Gets new puzzle to play
 def get_puzzle():
-    with open(f'{c_or_n}{os.path.sep}{puzzle_number}.txt', 'r') as f:
+    with open(f'Puzzles{os.path.sep}{series}{os.path.sep}{puzzle_number}.txt', 'r') as f: #Opens path to puzzle
         global puzzle_data
         puzzle_data = f.read()
         puzzle_data = puzzle_data.split(' ')
@@ -101,10 +87,8 @@ def update_puzzle(word):
 
 #Displays the puzzle
 def display_puzzle(puzzle):
-    n = 15
-    while n > 0:
-        print(''.join(puzzle[15 - n]))
-        n -= 1
+    for i in range(15):
+        print(''.join(puzzle[i]))
 
 #Adds the letters that are used in the puzzle
 def collect_legal_letters(list):
