@@ -20,7 +20,9 @@ exit. Syntax: exit. | exits the program
 
 help. Syntax: help | prints this help
 
-load Syntax: load "puzzle number" | loads a puzzle to edit
+load. Syntax: load "puzzle number" | loads a puzzle to edit
+
+move_puzzle. Syntax move_puzzle "puzzle_number" "location" | moves a puzzle to a different location in the series
 
 mv. Syntax: mv "word" "x" "y" | moves a word in the puzzle
 
