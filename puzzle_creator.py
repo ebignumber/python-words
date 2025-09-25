@@ -237,7 +237,11 @@ def save_puzzle(puzzle_integer):
 
 #Shifts a word coordinate by a certain amount
 def shift_word(word, x, y):
-    move_word(word, str(int(x) + int(x)), str(int(y) + int(y)))
+    for index, i in enumerate(puzzle_creation):
+        i = i.split(':')
+        if word.upper() == i[3]:
+            move_word(word, str(int(x) + int(i[1])), str(int(y) + int(i[2])))
+            break
 
 #Loads a puzzle with a name
 def load_puzzle(name):

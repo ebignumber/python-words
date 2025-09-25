@@ -1,2 +1,0 @@
-read_command(): reads a command that the creator typed in.
-at the end of the script, there is a while loop that reads a players commands until the player is done creating puzzles

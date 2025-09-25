@@ -1,15 +1,25 @@
 import os
 has_played_a_round = False
-series = 'Sample'
-#reads input as 's' or 'c' from player
-while True:
-    if not has_played_a_round:
-        print('Select a series you want to play:\n')
-        series = input('')
-    if series.isalpha():  # Replace this with something that looks for the series
-        break
-    else: print('Invalid Response')
+series = ''
+puzzle_path = ''
 
+#reads series in Puzzles
+def start_game():
+    global series
+    global puzzle_path
+    puzzles = os.listdir('Puzzles')
+    for index, i in enumerate(puzzles):
+        print(str(index + 1) + ': ' + str(i))
+    while True:
+        if not has_played_a_round:
+            print('Select a series you want to play:\n')
+            select_series = input('')
+        if select_series.isnumeric() and not "-" in select_series and not select_series == '0':
+            try: series = puzzles[int(select_series) - 1]; break
+            except: print("Number must be one of the options")
+        else: print('Your input must be a number listed')
+    puzzle_path = f'Puzzles{os.path.sep}{series}'
+start_game()
 
 #Select the puzzle
 def select_puzzle(): #This function needs to be updated
@@ -20,11 +30,9 @@ def select_puzzle(): #This function needs to be updated
         while True: 
             try:
                 puzzle_number = int(input('Enter a puzzle number: '))
-                if puzzle_number < 1 or puzzle_number > 10:
-                    puzzle_number = input('Level Number must be between 1 and 10')
+                if puzzle_number < 1 or puzzle_number > len(os.listdir(puzzle_path)):
+                    puzzle_number = input(f'Level Number must be between 1 and {len(os.listdir(puzzle_path))}\nEnter a puzzle number: ')
                 else:
-                    global c_or_n
-                    c_or_n = 'Puzzles'
                     break
             except:
                 print('not a number')
@@ -60,7 +68,7 @@ def add_word_to_puzzle(opt, x, y, w, word_found):
       
 #Gets new puzzle to play
 def get_puzzle():
-    with open(f'Puzzles{os.path.sep}{series}{os.path.sep}{puzzle_number}.txt', 'r') as f: #Opens path to puzzle
+    with open(f'{puzzle_path}{os.path.sep}{puzzle_number}.txt', 'r') as f: #Opens path to puzzle
         global puzzle_data
         puzzle_data = f.read()
         puzzle_data = puzzle_data.split(' ')
@@ -131,9 +139,20 @@ def play_game():
 #The loop calling the other functions
 while True:
     play_game()
-    yes_or_no = input('Would you like to play the next level? n/no')
+    if puzzle_number < len(os.listdir(puzzle_path)):
+        yes_or_no = input('Would you like to play the next level? \nn: no\ns: start new level\nany other key: start next level\n')
+    else:
+        yes_or_no = input('Congrats! you finished the series! Would you like to play another series? \nn: no\n')
     if yes_or_no == 'n':
         break
+    elif puzzle_number >= len(os.listdir(puzzle_path)) or yes_or_no == 's':
+        print('\n')
+        has_played_a_round = False
+        start_game()
+        select_puzzle()
+        empty_puzzle_list()
+        get_puzzle()
+        found_words.clear()
     else:
         has_played_a_round = True
         select_puzzle()
