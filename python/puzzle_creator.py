@@ -2,7 +2,7 @@ import os
 puzzle_creation = []
 autodisplay = False
 series = "Custom"
-puzzle_path = f'Puzzles{os.path.sep}{series}'
+puzzle_path = f'..{os.path.sep}Puzzles{os.path.sep}{series}'
 #Help string
 
 help_string = '''

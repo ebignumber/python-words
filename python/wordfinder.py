@@ -7,7 +7,7 @@ puzzle_path = ''
 def start_game():
     global series
     global puzzle_path
-    puzzles = os.listdir('Puzzles')
+    puzzles = os.listdir(f'..{os.path.sep}Puzzles')
     for index, i in enumerate(puzzles):
         print(str(index + 1) + ': ' + str(i))
     while True:
@@ -18,7 +18,7 @@ def start_game():
             try: series = puzzles[int(select_series) - 1]; break
             except: print("Number must be one of the options")
         else: print('Your input must be a number listed')
-    puzzle_path = f'Puzzles{os.path.sep}{series}'
+    puzzle_path = f'..{os.path.sep}Puzzles{os.path.sep}{series}'
 start_game()
 
 #Select the puzzle
