@@ -99,6 +99,8 @@ def move_puzzle(puzzle_number, location):
     try: 
         puzzle_number = int(puzzle_number)
         location = int(location)
+        if location < 1:
+            print('the location integer must be positive')
     except: print('the arguments must be integers')
     try: os.rename(f'{puzzle_path}{os.path.sep}{puzzle_number}.txt', f'{puzzle_path}{os.path.sep}moving.txt')
     except: 
@@ -221,7 +223,10 @@ def save_puzzle(puzzle_integer):
 
     try:
         if len(os.listdir(puzzle_path)) + 1 < int(puzzle_integer):
-            print("The integer is too big!, try just save instead")
+            print("The integer is too big!, try just 'save' instead")
+            return
+        elif int(puzzle_integer) < 1:
+            print("The integer is too small!, try just 'save' instead")
             return
     except:
         print("the puzzle needs to be saved as an integer")
