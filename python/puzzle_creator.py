@@ -1,4 +1,6 @@
 import os
+os.chdir(os.path.dirname(__file__))
+
 puzzle_creation = []
 autodisplay = False
 series = "Custom"
