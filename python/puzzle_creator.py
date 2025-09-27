@@ -2,7 +2,7 @@ import os
 os.chdir(os.path.dirname(__file__))
 
 puzzle_creation = []
-autodisplay = False
+autodisplay = True
 series = "Custom"
 puzzle_path = f'..{os.path.sep}Puzzles{os.path.sep}{series}'
 #Help string
@@ -65,16 +65,32 @@ def print_word_to_puzzle(opt, x, y, w):
 
 #Displays the puzzle and gives details about it
 def display_puzzle():
+    words = []
     print('\n_______________')
     for i in puzzle_creation:
         i = i.split(':')
         print_word_to_puzzle(i[0], int(i[1]), int(i[2]), i[3])
+        words.append(i[3])
     for j in range(15):
         print(f"{''.join(my_list[j])}{j}")
     print('012345678901234')
     reset_list()
     print(f'words: {puzzle_creation}\n')
+    #Prints letters used in the puzzle
+    letters = []
+    mixed_words = ''.join(words)
+    legal_letters = set(mixed_words)
+    for i in legal_letters:
+        occurrences = []
+        for j in words:
+            occurrences.append(j.count(i))
+        if max(occurrences) == 1:
+            letters.append(i)
+        else:
+            letters.append(f'{max(occurrences)}{i}')
+    print(f"Letters: {letters}")
 
+     
 def change_series(new_series):
     global series
     series = new_series
@@ -255,7 +271,7 @@ def shift_word(word, x, y):
 #Loads a puzzle with a name
 def load_puzzle(name):
     try:
-        with open(f'Puzzles{os.path.sep}{series}{os.path.sep}{name}.txt', 'r') as f:
+        with open(f'{puzzle_path}{os.path.sep}{name}.txt', 'r') as f:
             global puzzle_creation
             puzzle_creation = f.read().split(' ')
             #Removes \n from puzzles if present
