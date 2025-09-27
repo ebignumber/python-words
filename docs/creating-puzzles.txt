@@ -37,9 +37,9 @@ This command makes it so that the puzzle is automatically displayed after every 
 
 *display
 
-Syntax: display
+Syntax: display opt("puzzle_number")
 
-Displays the puzzle in a 15 by 15 grid, and the words that are in the puzzle. Like in this example:
+Displays the puzzle number (or the puzzle you are creating if you don't type an argument) in a 15 by 15 grid, and the words that are in the puzzle. Like in this example:
 
 _______________
                0
@@ -140,9 +140,9 @@ Overwrites a puzzle with the one you made.
 
 *series
 
-Syntax: series "series"
+Syntax: series opt("series")
 
-Changes the series you're editing.
+Changes the series you're editing, and displays information about it. If you wanted to just see information about the current series you're on, just don't add an argument to the command.
 
 
 *shift
