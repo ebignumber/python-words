@@ -2,6 +2,8 @@
 cd /d "%~dp0python"
 
 :MENU
+echo.
+echo.
 echo Welcome to Python Words!
 echo.
 echo What would you like to do?
@@ -9,6 +11,7 @@ echo.
 echo 1. Create Puzzles
 echo 2. Play Puzzles
 echo 3. Exit
+echo.
 set /p SELECTION=Choose an option: 
 
 if "%SELECTION%"=="1" (

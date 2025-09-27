@@ -150,3 +150,6 @@ Changes the series you're editing.
 Syntax: shift "word" "x" "y"
 
 Moves a word in the puzzle horizontally by x and vertically by y.
+
+
+NOTE. If you don't add enough arguments to your command, you will get an error saying you didn't. However, if you use too many arguments in your command, the extras will be ignored, and the command will run.
