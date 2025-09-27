@@ -79,7 +79,7 @@ def change_series(new_series):
     global series
     series = new_series
     global puzzle_path
-    puzzle_path = f'Puzzles{os.path.sep}{series}'
+    puzzle_path = f'..{os.path.sep}Puzzles{os.path.sep}{series}'
     try: print(f'Changed series to {new_series}!\nPuzzles: {len(os.listdir(puzzle_path))}')
     except: print(f'NEW SERIES\n\nChanged series to {new_series}!\nPuzzles: 0')
 
