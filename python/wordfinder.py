@@ -114,6 +114,20 @@ def collect_legal_letters(list):
             letters.append(f'{max(ocurrences)}{i}')
     print(f"Letters: {letters}")
             
+def read_command(command):
+    match command:
+        case "/EXIT":
+            exit()
+        case "/RESET":
+            empty_puzzle_list()
+            get_puzzle()
+            found_words.clear()
+            global current_puzzle
+            current_puzzle = puzzle_list
+        case _:
+            print('not a command')
+            return
+
 #Tries to find the guessed word in the list of words 
 def guess_word():
     guess = input('Guess a word:\n').upper()
@@ -123,6 +137,8 @@ def guess_word():
     elif guess in word_list:
         update_puzzle(guess)
         print('Word Found')
+    elif guess[0] == '/':
+        read_command(guess)
     else:
         print('Word Not Found')
 
