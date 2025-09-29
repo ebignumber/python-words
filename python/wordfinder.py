@@ -1,4 +1,4 @@
-import os
+import os; import random
 os.chdir(os.path.dirname(__file__))
 has_played_a_round = False
 series = ''
@@ -30,7 +30,10 @@ def select_puzzle(): #This function needs to be updated
     if not has_played_a_round: 
         while True: 
             try:
-                puzzle_number = int(input('Enter a puzzle number: '))
+                puzzle_number = input('Enter a puzzle number or type "exit" to exit: ')
+                if puzzle_number == 'exit':
+                    break
+                puzzle_number = int(puzzle_number)
                 if puzzle_number < 1 or puzzle_number > len(os.listdir(puzzle_path)):
                     puzzle_number = input(f'Level Number must be between 1 and {len(os.listdir(puzzle_path))}\nEnter a puzzle number: ')
                 else:
@@ -39,7 +42,8 @@ def select_puzzle(): #This function needs to be updated
                 print('not a number')
     else:
         puzzle_number += 1
-
+    if puzzle_number == 'exit':
+        exit()
 select_puzzle()
 #converts puzzle to a list of lists
 def empty_puzzle_list():
@@ -115,20 +119,39 @@ def collect_legal_letters(list):
     print(f"Letters: {letters}")
             
 def read_command(command):
+    global current_puzzle
+    global puzzle_data
     match command:
         case "/EXIT":
             exit()
+
+        case "/HINT":
+            word_to_hint = word_list[random.randint(0, len(word_list) - 1)]
+            index_to_hint = random.randint(0, len(word_to_hint) - 1)
+            for i in puzzle_data:
+                if i[i.rfind(':') + 1:len(i)] == word_to_hint:
+                    i = i.split(':')
+                    direction = i[0]
+                    x = int(i[1])
+                    y = int(i[2])
+                    break
+            if direction == 'r':
+                puzzle_list[y][x + index_to_hint] = word_to_hint[index_to_hint]
+            else:
+                puzzle_list[y + index_to_hint][x] = word_to_hint[index_to_hint]
+            print('Hint Added!')
+
         case "/RESET":
             empty_puzzle_list()
             get_puzzle()
             found_words.clear()
-            global current_puzzle
             current_puzzle = puzzle_list
+
         case _:
             print('not a command')
             return
 
-#Tries to find the guessed word in the list of words 
+#Tries to find the guessed word in the list of words  
 def guess_word():
     guess = input('Guess a word:\n').upper()
     print('\n')

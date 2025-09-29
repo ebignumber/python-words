@@ -127,6 +127,8 @@ def delete_puzzle(puzzle_number):
         except: print(f"an error occurred: could not find puzzle {n + 1} in {series}\nPlease make sure that all the puzzles in the series are integers and that no numbers are missing"); return
         n += 1
     print("deletion successful")
+    if len(os.listdir(puzzle_path)) == 0:
+        os.rmdir(puzzle_path)
 
 
 def move_puzzle(puzzle_number, location):
@@ -366,7 +368,7 @@ def read_command(command):
             except:
                 print('You need to add 3 arguments to this command')
         case _:
-            print(f'Could not find command {command}')
+            print(f'Could not find command "{command[0]}"')
   
   #runs display puzzle function if autodisplay is on
     if autodisplay:
