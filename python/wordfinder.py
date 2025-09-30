@@ -38,7 +38,7 @@ def select_puzzle(): #This function needs to be updated
                     break
                 puzzle_number = int(puzzle_number)
                 if puzzle_number < 1 or puzzle_number > len(os.listdir(puzzle_path)):
-                    puzzle_number = input(f'Level Number must be between 1 and {len(os.listdir(puzzle_path))}\nEnter a puzzle number: ')
+                    print(f"Level Number must be between 1 and {len(os.listdir(puzzle_path))}")
                 else:
                     break
             except:
