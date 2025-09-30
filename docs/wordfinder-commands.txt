@@ -1,5 +1,5 @@
 COMMANDS:
-/contract: Merges letters in the letters list to shorten it
+/compact: Merges letters in the letters list to shorten it
 /easy: Makes it so that the letters in the letters list only contains letters in the words that haven't been guessed
 /expand: Expands the letter list: (2E) becomes two E's in the list
 /exit: Exits the program

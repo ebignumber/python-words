@@ -134,7 +134,7 @@ def read_command(command):
             with open(f"..{os.path.sep}docs{os.path.sep}wordfinder-commands.txt", 'r') as f:
                 message = f.read()
 
-        case "/CONTRACT":
+        case "/COMPACT":
             letter_set = set(letters)
             for i in letter_set:
                 if not letters.count(i) == 1:
