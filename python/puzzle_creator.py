@@ -372,7 +372,7 @@ def read_command(command):
   
   #runs display puzzle function if autodisplay is on
     if autodisplay:
-        display_puzzle()
+        display_puzzle(['display'])
 
 #Allows user to input commands
 print('Type "help" for help')
