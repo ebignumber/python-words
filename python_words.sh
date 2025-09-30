@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 cd "$(dirname $0)/python"
 CHOOSE(){
- printf "\n\n"
+ clear
  printf "Welcome to Python Words!\n\nWhat would you like to do?\n\n\n1. Create Puzzles\n2. Play Puzzles\n3. Exit\n\n"
  read -r SELECTION
  printf "\n\n"

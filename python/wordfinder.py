@@ -2,8 +2,10 @@ import os; import random
 os.chdir(os.path.dirname(__file__))
 has_played_a_round = False
 difficulty = 'normal'
+contracted = False
 series = ''
 puzzle_path = ''
+message = ''
 
 #reads series in Puzzles
 def start_game():
@@ -99,7 +101,6 @@ def update_puzzle(word):
     puzzle_data.pop(word_list.index(word))
     word_list.pop(word_list.index(word))
 
-#Displays the puzzle
 def display_puzzle(puzzle):
     for i in range(15):
         print(''.join(puzzle[i]))
@@ -115,19 +116,46 @@ def collect_legal_letters(list):
     all_words_string = ''.join(all_words)
     legal_letters = set(all_words_string)
     for i in legal_letters:
-        ocurrences = []
+        occurrences = []
         for j in all_words:
-            ocurrences.append(j.count(i))
-        if max(ocurrences) == 1:
+            occurrences.append(j.count(i))
+        if max(occurrences) == 1:
             letters.append(i)
+        elif contracted:
+            letters.append(f'{max(occurrences)}{i}')
         else:
-            letters.append(f'{max(ocurrences)}{i}')
+            for k in range(max(occurrences)):
+                letters.append(i)
             
 def read_command(command):
-    global current_puzzle, puzzle_data, difficulty, letters
+    global current_puzzle, puzzle_data, difficulty, letters, contracted, message
     match command:
+        case "/":
+            with open(f"..{os.path.sep}docs{os.path.sep}wordfinder-commands.txt", 'r') as f:
+                message = f.read()
+
+        case "/CONTRACT":
+            letter_set = set(letters)
+            for i in letter_set:
+                if not letters.count(i) == 1:
+                    count = letters.count(i)
+                    first_occurrence = letters.index(i)
+                    for j in range(letters.count(i)):
+                        letters.pop(letters.index(i))
+                    letters.insert(first_occurrence, f'{count}{i}')
+
         case "/EASY":
             difficulty = 'easy'
+
+        case "/EXPAND":
+            for index, i in enumerate(letters):
+                if not i.isalpha():
+                    integer = int(i[0:-1])
+                    letter = i[-1]
+                    letters.pop(index)
+                    for j in range(integer):
+                        print(letter)
+                        letters.insert(index, letter)
 
         case "/EXIT":
             exit()
@@ -150,7 +178,7 @@ def read_command(command):
                 read_command("/HINT")
             else:
                 puzzle_list[y][x] = word_to_hint[index_to_hint]
-                print('Hint Added!')
+                message = 'Hint Added!\n'
 
         case "/NORMAL":
             difficulty = 'normal'
@@ -170,12 +198,13 @@ def read_command(command):
                 current_letters.pop(random_int)
             
         case _:
-            print('not a command')
+            message = 'Not a command\n'
             return
 
 #Tries to find the guessed word in the list of words  
 def guess_word():
-    guess = input('Guess a word:\n').upper()
+    global message
+    guess = input('Guess a word or type "/" for a list of commands:\n\n').upper()
     print('\n')
     try:
         if guess[0] == '/':
@@ -185,26 +214,30 @@ def guess_word():
         pass
 
     if guess in found_words:
-        print('Word Already Guessed')
+        message = 'Word Already Guessed\n'
     elif guess in word_list:
         update_puzzle(guess)
-        print('Word Found')
+        message = 'Word Found\n'
         if difficulty == 'easy': collect_legal_letters(word_list)
     else:
-        print('Word Not Found')
+        message = 'Word Not Found\n'
 
 #Plays the game
 def play_game():
-    global letters
-    global current_puzzle
+    global letters, current_puzzle, message
     current_puzzle = puzzle_list
     collect_legal_letters(word_list)
     while len(word_list) != 0:
+        os.system('clear')
         display_puzzle(current_puzzle)
         print(f'Letters: {letters}')
+        print("\n" + message)
+        message = ''
         guess_word()
+    os.system('clear')
+    message = ''
     display_puzzle(current_puzzle)
-    print(f'You completed puzzle {puzzle_number}!')
+    print(f'You completed puzzle {puzzle_number}!\n')
 
 #The loop calling the other functions
 while True:
