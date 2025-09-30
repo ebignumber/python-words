@@ -1,6 +1,7 @@
 import os; import random
 os.chdir(os.path.dirname(__file__))
 has_played_a_round = False
+difficulty = 'normal'
 series = ''
 puzzle_path = ''
 
@@ -105,23 +106,29 @@ def display_puzzle(puzzle):
 
 #Adds the letters that are used in the puzzle
 def collect_legal_letters(list):
+    global letters
+    if difficulty == 'normal':
+        all_words = list + found_words
+    else:
+        all_words = list
     letters = []
-    list = ''.join(list)
-    legal_letters = set(list)
+    all_words_string = ''.join(all_words)
+    legal_letters = set(all_words_string)
     for i in legal_letters:
         ocurrences = []
-        for j in word_list:
+        for j in all_words:
             ocurrences.append(j.count(i))
         if max(ocurrences) == 1:
             letters.append(i)
         else:
             letters.append(f'{max(ocurrences)}{i}')
-    print(f"Letters: {letters}")
             
 def read_command(command):
-    global current_puzzle
-    global puzzle_data
+    global current_puzzle, puzzle_data, difficulty, letters
     match command:
+        case "/EASY":
+            difficulty = 'easy'
+
         case "/EXIT":
             exit()
 
@@ -132,14 +139,21 @@ def read_command(command):
                 if i[i.rfind(':') + 1:len(i)] == word_to_hint:
                     i = i.split(':')
                     direction = i[0]
-                    x = int(i[1])
-                    y = int(i[2])
+                    if direction == 'r':
+                        x = int(i[1]) + index_to_hint
+                        y = int(i[2])
+                    else:
+                        x = int(i[1])
+                        y = int(i[2]) + index_to_hint
                     break
-            if direction == 'r':
-                puzzle_list[y][x + index_to_hint] = word_to_hint[index_to_hint]
+            if not puzzle_list[y][x] == '#':
+                read_command("/HINT")
             else:
-                puzzle_list[y + index_to_hint][x] = word_to_hint[index_to_hint]
-            print('Hint Added!')
+                puzzle_list[y][x] = word_to_hint[index_to_hint]
+                print('Hint Added!')
+
+        case "/NORMAL":
+            difficulty = 'normal'
 
         case "/RESET":
             empty_puzzle_list()
@@ -147,6 +161,14 @@ def read_command(command):
             found_words.clear()
             current_puzzle = puzzle_list
 
+        case "/SHUFFLE":
+            current_letters = letters
+            letters = []
+            while not len(current_letters) == 0:
+                random_int = random.randint(0, len(current_letters) - 1)
+                letters.append(current_letters[random_int])
+                current_letters.pop(random_int)
+            
         case _:
             print('not a command')
             return
@@ -155,23 +177,31 @@ def read_command(command):
 def guess_word():
     guess = input('Guess a word:\n').upper()
     print('\n')
+    try:
+        if guess[0] == '/':
+            read_command(guess)
+            return
+    except:
+        pass
+
     if guess in found_words:
         print('Word Already Guessed')
     elif guess in word_list:
         update_puzzle(guess)
         print('Word Found')
-    elif guess[0] == '/':
-        read_command(guess)
+        if difficulty == 'easy': collect_legal_letters(word_list)
     else:
         print('Word Not Found')
 
 #Plays the game
 def play_game():
+    global letters
     global current_puzzle
     current_puzzle = puzzle_list
+    collect_legal_letters(word_list)
     while len(word_list) != 0:
         display_puzzle(current_puzzle)
-        collect_legal_letters(word_list)
+        print(f'Letters: {letters}')
         guess_word()
     display_puzzle(current_puzzle)
     print(f'You completed puzzle {puzzle_number}!')
