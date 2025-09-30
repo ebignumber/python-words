@@ -289,6 +289,19 @@ def shift_word(word, x, y):
             move_word(word, str(int(x) + int(i[1])), str(int(y) + int(i[2])))
             break
 
+def shift_all(x, y):
+    try: x = int(x); y = int(y)
+    except: print('x and y must be integers'); return
+    for i in puzzle_creation:
+        i = i.split(':')
+        if (len(i[3]) + int(x) + int(i[1]) - 1 > 14 and i[0] == 'r') or (len(i[3]) + int(y) + int(i[2]) - 1 > 14 and i[0] == 'd') or (int(x) + int(i[1]) < 0 and i[0] == 'r') or (int(y) + int(i[2]) < 0 and i[0] == 'd'):
+            print(f'Could not shift word "{i[3]}". That word must be move before running the command')
+            return
+    for i in puzzle_creation:
+        i = i.split(':')
+        shift_word(i[3], str(x), str(y))
+    return
+
 #Loads a puzzle with a name
 def load_puzzle(name):
     try:
@@ -296,7 +309,7 @@ def load_puzzle(name):
             global puzzle_creation
             puzzle_creation = f.read().split(' ')
             #Removes \n from puzzles if present
-            if puzzle_creation[-1].find('\n'):
+            if puzzle_creation[-1][-1] == '\n':
                 puzzle_creation[-1] = puzzle_creation[-1][0:-1]
             print(f"loaded {name}")
     except:
@@ -367,12 +380,18 @@ def read_command(command):
                 shift_word(command[1], command[2], command[3])
             except:
                 print('You need to add 3 arguments to this command')
+        case 'shift_all':
+            try:
+                shift_all(command[1], command[2])
+            except:
+                print('You need to add 2 arguments to this command')
         case _:
             print(f'Could not find command "{command[0]}"')
   
   #runs display puzzle function if autodisplay is on
     if autodisplay:
         display_puzzle(['display'])
+
 
 #Allows user to input commands
 print('Type "help" for help')
