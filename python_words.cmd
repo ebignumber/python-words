@@ -2,6 +2,7 @@
 cd /d "%~dp0python"
 
 :MENU
+cls
 echo.
 echo.
 echo Welcome to Python Words!
