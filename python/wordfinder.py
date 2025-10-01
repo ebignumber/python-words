@@ -228,13 +228,13 @@ def play_game():
     current_puzzle = puzzle_list
     collect_legal_letters(word_list)
     while len(word_list) != 0:
-        os.system('clear')
+        os.system('cls' if os.name == 'nt' else 'clear')
         display_puzzle(current_puzzle)
         print(f'Letters: {letters}')
         print("\n" + message)
         message = ''
         guess_word()
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     message = ''
     display_puzzle(current_puzzle)
     print(f'You completed puzzle {puzzle_number}!\n')
