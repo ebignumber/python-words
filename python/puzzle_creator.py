@@ -73,7 +73,6 @@ def display_puzzle(command):
                 puzzle = f.read().split(' ')
                 if puzzle[-1][-1] == '\n':
                     puzzle = puzzle[0:-1]
-                print(puzzle)
         except:
             print('Could not read that puzzle.')
             return
