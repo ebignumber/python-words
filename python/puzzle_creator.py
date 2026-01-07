@@ -237,9 +237,11 @@ def rotate_word(word):
 
 
 def remove_word(word):
-    puzzle_creation.pop(word.upper())
-    return
-    #print(f'Could not find the word to {word}')
+    try:
+        puzzle_creation.pop(word.upper())
+        return
+    except:
+        print(f'Could not find the word to {word}')
 
 #Saves the puzzle with a name and offers to overwrite it if a puzzle with that name.  
 def save_puzzle(puzzle_integer):
@@ -333,7 +335,8 @@ def read_command(command):
             try: move_puzzle(command[1], command[2])
             except: print('You need to add 2 arguments to this command')
         case 'rm':
-            remove_word(command[1])
+            if len(command) >= 2: remove_word(command[1])
+            else: print('You need to add 2 arguments to this command')
         case 'reset':
             puzzle_creation = []
         case 'rotate':
