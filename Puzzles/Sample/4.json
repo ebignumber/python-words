@@ -1,22 +1,37 @@
 {
-    "HAPPY": {
+    "CLOUD": {
+        "direction": "r",
+        "x": 6,
+        "y": 5
+    },
+    "LOUD": {
+        "direction": "d",
+        "x": 7,
+        "y": 5
+    },
+    "COD": {
+        "direction": "r",
+        "x": 5,
+        "y": 8
+    },
+    "CUD": {
+        "direction": "d",
+        "x": 5,
+        "y": 8
+    },
+    "OLD": {
+        "direction": "r",
+        "x": 10,
+        "y": 3
+    },
+    "COLD": {
+        "direction": "d",
+        "x": 10,
+        "y": 2
+    },
+    "COULD": {
         "direction": "r",
         "x": 1,
-        "y": 1
-    },
-    "PAY": {
-        "direction": "d",
-        "x": 2,
-        "y": 0
-    },
-    "YAP": {
-        "direction": "d",
-        "x": 5,
-        "y": 1
-    },
-    "APP": {
-        "direction": "r",
-        "x": 5,
-        "y": 2
+        "y": 10
     }
 }

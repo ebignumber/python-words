@@ -1,32 +1,27 @@
 {
-    "DODGE": {
+    "SEW": {
         "direction": "r",
-        "x": 3,
-        "y": 3
+        "x": 6,
+        "y": 5
     },
-    "EGO": {
-        "direction": "d",
-        "x": 7,
-        "y": 3
-    },
-    "ODD": {
-        "direction": "d",
-        "x": 4,
-        "y": 3
-    },
-    "DOG": {
+    "STEW": {
         "direction": "d",
         "x": 6,
-        "y": 1
+        "y": 5
     },
-    "GO": {
+    "WEST": {
+        "direction": "d",
+        "x": 8,
+        "y": 5
+    },
+    "WET": {
         "direction": "r",
-        "x": 7,
-        "y": 4
+        "x": 6,
+        "y": 8
     },
-    "DO": {
+    "SET": {
         "direction": "r",
         "x": 4,
-        "y": 5
+        "y": 6
     }
 }

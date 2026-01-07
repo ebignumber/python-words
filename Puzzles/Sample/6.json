@@ -1,22 +1,27 @@
 {
-    "DANDY": {
+    "AUTUMN": {
+        "direction": "r",
+        "x": 4,
+        "y": 6
+    },
+    "NUT": {
+        "direction": "d",
+        "x": 9,
+        "y": 6
+    },
+    "AT": {
         "direction": "r",
         "x": 3,
-        "y": 3
+        "y": 7
     },
-    "DANCE": {
+    "TAN": {
         "direction": "d",
         "x": 6,
-        "y": 3
+        "y": 6
     },
-    "CAN": {
-        "direction": "r",
-        "x": 9,
-        "y": 3
-    },
-    "DAD": {
+    "MAT": {
         "direction": "d",
-        "x": 3,
-        "y": 3
+        "x": 4,
+        "y": 5
     }
 }

@@ -1,32 +1,38 @@
 {
-    "GRAINS": {
+    "SHARE": {
+        "direction":"r",
+        "x": 0,
+        "y": 0},
+    "RASH": {
         "direction": "r",
-        "x": 2,
-        "y": 2
-    },
-    "GRANTS": {
-        "direction": "d",
-        "x": 2,
-        "y": 2
-    },
-    "STAR": {
+        "x": 0, 
+        "y": 2},
+    "SEA": {
+        "direction": "r", 
+        "x": 0, 
+        "y": 4},
+    "ERA": {
         "direction": "r",
-        "x": 2,
-        "y": 7
-    },
-    "RANT": {
-        "direction": "d",
-        "x": 5,
-        "y": 7
-    },
-    "SAG": {
-        "direction": "d",
-        "x": 7,
-        "y": 2
-    },
-    "TAG": {
+        "x": 0, 
+        "y": 6},
+    "EARS": {
+        "direction": "r", 
+        "x": 0, 
+        "y": 8}, 
+    "SHEAR": {
+        "direction": "r", 
+        "x": 0, 
+        "y": 10},
+    "ARE": {
         "direction": "r",
-        "x": 5,
-        "y": 4
-    }
+        "x": 0,
+        "y": 12},
+    "ASH": {
+        "direction": "r", 
+        "x": 0, 
+        "y": 14}, 
+    "HARE": {
+        "direction": "r", 
+        "x": 10,
+        "y": 0}
 }

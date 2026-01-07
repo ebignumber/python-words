@@ -1,27 +1,22 @@
 {
-    "PHONE": {
-        "direction": "d",
-        "x": 5,
-        "y": 5
-    },
-    "PEN": {
-        "direction": "r",
-        "x": 5,
-        "y": 5
-    },
-    "ONE": {
-        "direction": "r",
-        "x": 5,
-        "y": 7
-    },
-    "HEN": {
+    "HAPPY": {
         "direction": "r",
         "x": 4,
-        "y": 9
+        "y": 6
     },
-    "NO": {
+    "PAY": {
         "direction": "d",
-        "x": 6,
-        "y": 9
+        "x": 5,
+        "y": 5
+    },
+    "YAP": {
+        "direction": "d",
+        "x": 8,
+        "y": 6
+    },
+    "APP": {
+        "direction": "r",
+        "x": 8,
+        "y": 7
     }
 }

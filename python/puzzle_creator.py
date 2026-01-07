@@ -5,7 +5,6 @@ puzzle_creation = {}
 autodisplay = False
 series = "Custom"
 puzzle_path = f'..{os.path.sep}Puzzles{os.path.sep}{series}{os.path.sep}'
-#Help string
 
 help_string = '''
 add. Syntax: add "direction":"x":"y":"word" | Adds a word to the puzzle
@@ -51,6 +50,7 @@ def reset_list():
         my_list.append([])
         for j in range(15):
             my_list[i].append(' ')
+
 reset_list()
 
 
@@ -170,10 +170,8 @@ def add_word(word):
     elif not word_test[0] in 'rd' or len(word_test[0]) != 1:
         print('The direction value must be either r or d')
         return
-    try:
-        int(word_test[1])
-        int(word_test[2])
-    except:
+    try: int(word_test[1]); int(word_test[2])
+    except: 
         print("x and y coordinates must be integers")
         return
     if int(word_test[1]) < 0 or int(word_test[1]) > 14:
@@ -210,8 +208,10 @@ def move_word(word, x, y):
         print('y coordinate must be between 0 and 14')
         return
 
-        #test if word is out of bounds if moved
-    if (len(word) + x - 1 > 14 and puzzle_creation[word.upper()]['direction'] == 'r') or (len(word) + y - 1 > 14 and puzzle_creation[word.upper()]['direction'] == 'd'):
+
+    #test if word is out of bounds if moved
+    word_direction = puzzle_creation[word.upper()]['direction']
+    if (len(word) + x - 1 > 14 and word_direction == 'r') or (len(word) + y - 1 > 14 and word_direction == 'd'):
         print(f'Could not move {word}, it would go out of bounds')
         return
     #moves the word
@@ -222,8 +222,12 @@ def move_word(word, x, y):
         print(f'Could not find the word to move {word}')
 
 def rotate_word(word):
+    word_x = puzzle_creation[word.upper()]['x']
+    word_y = puzzle_creation[word.upper()]['y']
+    word_direction = puzzle_creation[word.upper()]['direction']
+
     #test if word is out of bounds if rotated
-    if (len(word) + puzzle_creation[word.upper()]['x'] - 1 > 14 and puzzle_creation[word.upper()]['direction'] == 'd') or (len(word) + puzzle_creation[word.upper()]['y'] - 1 > 14 and puzzle_creation[word.upper()]['direction'] == 'r'):
+    if (len(word) + word_x - 1 > 14 and word_direction == 'd') or (len(word) + word_y - 1 > 14 and word_direction == 'r'):
         print(f'Could not rotate {word}, it would go out of bounds')
         return
     #rotates the word
@@ -241,7 +245,7 @@ def remove_word(word):
         puzzle_creation.pop(word.upper())
         return
     except:
-        print(f'Could not find the word to {word}')
+        print(f'Could not find the word {word} to remove')
 
 #Saves the puzzle with a name and offers to overwrite it if a puzzle with that name.  
 def save_puzzle(puzzle_integer):
@@ -276,12 +280,15 @@ def shift_word(word, x, y):
 def shift_all(x, y):
     try: x = int(x); y = int(y)
     except: print('x and y must be integers'); return
-    for i in list(puzzle_creation.keys()):
-        if (len(puzzle_creation[i]) + x + puzzle_creation[i]['x'] - 1 > 14 and puzzle_creation[i]['direction'] == 'r') or (len(puzzle_creation[i]) + y + puzzle_creation[i]['y'] - 1 > 14 and puzzle_creation[i]['direction'] == 'd') or (x + puzzle_creation[i]['x'] < 0 and puzzle_creation[i]['direction'] == 'r') or (y + puzzle_creation[i]['y'] < 0 and puzzle_creation[i]['direction'] == 'd'):
-            print(f'Could not shift word "{i}". That word must be move before running the command')
+    for word in list(puzzle_creation.keys()):
+        word_x = puzzle_creation[word]['x']
+        word_y = puzzle_creation[word]['y']
+        word_direction = puzzle_creation[word]['direction']
+        if (len(word) + x + word_x - 1 > 14 and word_direction == 'r') or (len(word) + y + word_y - 1 > 14 and word_direction == 'd') or (x + word_x < 0 and word_direction == 'r') or (y + word_y < 0 and word_direction == 'd'):
+            print(f'Could not shift word "{word}". That word must be moved before running the command')
             return
-    for i in list(puzzle_creation.keys()):
-        shift_word(i, str(x), str(y))
+    for word in list(puzzle_creation.keys()):
+        shift_word(word, str(x), str(y))
     return
 
 #Loads a puzzle with a name
@@ -290,7 +297,6 @@ def load_puzzle(name):
         with open(f'{puzzle_path}{name}.json', 'r') as f:
             global puzzle_creation
             puzzle_creation = json.load(f)
-            #Removes \n from puzzles if present
             print(f"loaded {name}")
     except:
         print(f'Puzzle {name} doesn\'t exist')
@@ -302,19 +308,20 @@ def read_command(command):
     command = command.split(' ')
     match command[0]:
         case 'add':
-            try:
+            if len(command) >=  2: 
                 add_word(command[1])
-            except:
-                print('You need to add an argument to this command')
+            else: print('You need to add one argument to this command')
         case 'aw':
-            try: add_word(f'r:0:0:{command[1]}')
-            except: print('You need to add an argument to this command')
+            if len(command) >= 2: 
+                add_word(f'r:0:0:{command[1]}')
+            else: print('You need to add an argument to this command')
         case 'autodisplay':
             global autodisplay
             autodisplay = not autodisplay
         case 'delete':
-            try: delete_puzzle(command[1])
-            except: print('this command needs 1 argument')
+            if len(command) >= 2: 
+                delete_puzzle(command[1])
+            else: print('this command needs 1 argument')
         case 'display':
             display_puzzle(command)
         case 'exit':
@@ -322,15 +329,13 @@ def read_command(command):
         case 'help':
             print(help_string)
         case 'load':
-            try:
+            if len(command) >= 2:
                 load_puzzle(command[1])
-            except:
-                print('You need to add an argument to this command')
+            else: print('You need to add an argument to this command')
         case 'mv':
-           try:
-              move_word(command[1], command[2], command[3])
-           except:
-              print('You need to add 3 arguments to this command')
+            if len(command) >= 4:
+                move_word(command[1], command[2], command[3])
+            else: print('You need to add 3 arguments to this command')
         case 'move_puzzle':
             try: move_puzzle(command[1], command[2])
             except: print('You need to add 2 arguments to this command')
@@ -340,8 +345,8 @@ def read_command(command):
         case 'reset':
             puzzle_creation = []
         case 'rotate':
-            try: rotate_word(command[1])
-            except: print('You need to add 1 argument to this command')
+            if len(command) >= 2: rotate_word(command[1])
+            else: print('You need to add 1 argument to this command')
         case 'save':
             try:
                 save_puzzle(len(os.listdir(puzzle_path)) + 1 )
@@ -350,23 +355,20 @@ def read_command(command):
         case 'save_as':
             try:
                 save_puzzle(command[1])
-            except:
-                print('could not save puzzle')
+            except: print('could not save puzzle')
         case 'series':
             if len(command) == 1:
+                #list details about the series
                 change_series(series)
             else:
                 change_series(command[1])
         case 'shift':
-            try:
+            if len(command) >= 2:
                 shift_word(command[1], command[2], command[3])
-            except:
-                print('You need to add 3 arguments to this command')
+            else: print('You need to add 3 arguments to this command')
         case 'shift_all':
-            try:
-                shift_all(command[1], command[2])
-            except:
-                print('You need to add 2 arguments to this command')
+            if len(command) >= 3: shift_all(command[1], command[2])
+            else: print('You need to add 2 arguments to this command')
         case _:
             print(f'Could not find command "{command[0]}"')
   

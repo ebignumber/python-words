@@ -1,0 +1,47 @@
+{
+    "DANDY": {
+        "direction": "r",
+        "x": 3,
+        "y": 6
+    },
+    "DANCE": {
+        "direction": "d",
+        "x": 6,
+        "y": 6
+    },
+    "CAN": {
+        "direction": "d",
+        "x": 8,
+        "y": 7
+    },
+    "DAD": {
+        "direction": "d",
+        "x": 3,
+        "y": 6
+    },
+    "CANDY": {
+        "direction": "r",
+        "x": 6,
+        "y": 9
+    },
+    "ACE": {
+        "direction": "r",
+        "x": 4,
+        "y": 10
+    },
+    "DEAD": {
+        "direction": "r",
+        "x": 0,
+        "y": 0
+    },
+    "CYAN": {
+        "direction": "d",
+        "x": 5,
+        "y": 3
+    },
+    "DAY": {
+        "direction": "r",
+        "x": 3,
+        "y": 4
+    }
+}

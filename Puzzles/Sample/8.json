@@ -1,27 +1,47 @@
 {
-    "TRANSLATE": {
+    "REMAIN": {
         "direction": "r",
-        "x": 5,
+        "x": 2,
+        "y": 4
+    },
+    "RAIN": {
+        "direction": "r",
+        "x": 7,
+        "y": 7
+    },
+    "EAR": {
+        "direction": "r",
+        "x": 7,
         "y": 5
     },
-    "RATE": {
+    "MAIN": {
         "direction": "d",
-        "x": 6,
-        "y": 5
+        "x": 4,
+        "y": 4
     },
-    "EEL": {
+    "NEAR": {
+        "direction": "d",
+        "x": 7,
+        "y": 4
+    },
+    "NAME": {
+        "direction": "d",
+        "x": 10,
+        "y": 7
+    },
+    "ME": {
         "direction": "r",
-        "x": 5,
+        "x": 9,
+        "y": 10
+    },
+    "AIR": {
+        "direction": "r",
+        "x": 10,
         "y": 8
     },
-    "SALE": {
+    "RAN": {
         "direction": "d",
-        "x": 9,
-        "y": 5
-    },
-    "RAT": {
-        "direction": "d",
-        "x": 12,
-        "y": 1
+        "x": 2,
+        "y": 4
     }
 }

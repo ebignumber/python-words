@@ -1,17 +1,17 @@
 {
-    "HELLO": {
+    "CAT": {
         "direction": "r",
-        "x": 0,
-        "y": 0
+        "x": 6,
+        "y": 6
     },
-    "HOLE": {
+    "ACT": {
         "direction": "r",
-        "x": 0,
-        "y": 2
+        "x": 6,
+        "y": 8
     },
-    "HOE": {
+    "AT": {
         "direction": "r",
-        "x": 0,
+        "x": 6,
         "y": 4
     }
 }

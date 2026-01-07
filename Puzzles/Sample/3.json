@@ -1,32 +1,32 @@
 {
-    "PANTS": {
+    "DODGE": {
         "direction": "r",
-        "x": 3,
-        "y": 3
+        "x": 4,
+        "y": 6
     },
-    "PAINT": {
+    "EGO": {
         "direction": "d",
-        "x": 3,
-        "y": 3
+        "x": 8,
+        "y": 6
     },
-    "TAN": {
-        "direction": "r",
-        "x": 3,
-        "y": 7
-    },
-    "TIN": {
-        "direction": "r",
-        "x": 2,
-        "y": 5
-    },
-    "TIP": {
+    "ODD": {
         "direction": "d",
-        "x": 6,
-        "y": 3
+        "x": 5,
+        "y": 6
     },
-    "TAPS": {
+    "DOG": {
         "direction": "d",
         "x": 7,
-        "y": 0
+        "y": 4
+    },
+    "GO": {
+        "direction": "r",
+        "x": 8,
+        "y": 7
+    },
+    "DO": {
+        "direction": "r",
+        "x": 5,
+        "y": 8
     }
 }

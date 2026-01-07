@@ -1,27 +1,52 @@
 {
-    "ARABIC": {
+    "UTOPIA": {
         "direction": "r",
-        "x": 2,
-        "y": 2
+        "x": 3,
+        "y": 5
     },
-    "BRA": {
+    "UP": {
         "direction": "d",
-        "x": 2,
-        "y": 0
+        "x": 3,
+        "y": 5
     },
-    "BRICK": {
+    "POT": {
         "direction": "d",
         "x": 5,
-        "y": 2
+        "y": 4
     },
-    "CAR": {
+    "AT": {
         "direction": "d",
-        "x": 7,
-        "y": 2
+        "x": 8,
+        "y": 5
     },
-    "CAB": {
+    "PIT": {
+        "direction": "d",
+        "x": 10,
+        "y": 6
+    },
+    "PUT": {
         "direction": "r",
-        "x": 12,
-        "y": 2
+        "x": 6,
+        "y": 10
+    },
+    "OUT": {
+        "direction": "r",
+        "x": 8,
+        "y": 8
+    },
+    "TIP": {
+        "direction": "r",
+        "x": 8,
+        "y": 6
+    },
+    "IT": {
+        "direction": "r",
+        "x": 10,
+        "y": 7
+    },
+    "OAT": {
+        "direction": "d",
+        "x": 8,
+        "y": 8
     }
 }

@@ -1,32 +1,22 @@
 {
-    "ELEPHANT": {
+    "CHEESE": {
         "direction": "r",
-        "x": 0,
-        "y": 0
+        "x": 4,
+        "y": 5
     },
-    "PEE": {
-        "direction": "r",
-        "x": 0,
-        "y": 2
+    "CHESS": {
+        "direction": "d",
+        "x": 4,
+        "y": 5
     },
-    "HEAT": {
+    "SEE": {
         "direction": "r",
-        "x": 0,
-        "y": 4
+        "x": 4,
+        "y": 9
     },
-    "HAT": {
-        "direction": "r",
-        "x": 0,
-        "y": 6
-    },
-    "PANE": {
-        "direction": "r",
-        "x": 0,
-        "y": 10
-    },
-    "HEAL": {
-        "direction": "r",
-        "x": 0,
-        "y": 12
+    "SHE": {
+        "direction": "d",
+        "x": 8,
+        "y": 5
     }
 }
