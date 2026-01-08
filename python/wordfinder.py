@@ -171,7 +171,7 @@ def read_command(command):
             if not puzzle_list[y][x] == '#':
                 read_command("/HINT")
             else:
-                puzzle_list[y][x] = word_to_hint[index_to_hint]
+                puzzle_list[y][x] = f"\033[31m{word_to_hint[index_to_hint]}\033[0m"
                 message = 'Hint Added!\n'
 
         case "/NORMAL":
