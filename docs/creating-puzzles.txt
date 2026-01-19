@@ -22,6 +22,7 @@ x: Delete a puzzle in the series
 c: Change series
 o: Load data from a puzzle
 m: Move a puzzle to a different location
+v: View a series
 
 MISCELLANEOUS
 

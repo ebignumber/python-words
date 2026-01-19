@@ -12,6 +12,7 @@ class State:
 
 #Displays the puzzle and gives details about it
 def display_puzzle(puzzle):
+    displayed_puzzle = ''
     def print_selected_word_to_puzzle(opt, x, y, w):
         for index, i in enumerate(w):
             if opt == 'r':
@@ -32,7 +33,7 @@ def display_puzzle(puzzle):
 
     display = [[' ' for _ in range(15)] for _ in range(15)]
     words = []
-    print('_______________')
+    displayed_puzzle += '_______________'
     for word in list(puzzle.keys()):
         if word == user_state.selected:
             print_selected_word_to_puzzle(puzzle[word]['direction'], puzzle[word]['x'], puzzle[word]['y'], word)
@@ -40,9 +41,9 @@ def display_puzzle(puzzle):
             print_word_to_puzzle(puzzle[word]['direction'], puzzle[word]['x'], puzzle[word]['y'], word)
         words.append(word)
     for j in range(15):
-        print(f"{''.join(display[j])}{j}")
-    print('012345678901234')
-    print(f'words: {user_state.puzzle}\n')
+        displayed_puzzle += f"\n{''.join(display[j])}{j}"
+    displayed_puzzle += '\n012345678901234'
+    displayed_puzzle += f'\nwords: {user_state.puzzle}\n'
 
     #Prints letters used in the puzzle
     letters = []
@@ -56,8 +57,8 @@ def display_puzzle(puzzle):
             letters.append(i)
         else:
             letters.append(f'{max(occurrences)}{i}')
-    print(f"Letters: {letters}\n")
-
+    displayed_puzzle += f"\nLetters: {letters}\n"
+    return displayed_puzzle
 
 def add_word(word):
     user_state.puzzle.__setitem__(word.upper(), {'direction':'r', 'x':0, 'y':0})
@@ -130,12 +131,12 @@ def move_puzzle(puzzle_number, location):
     except: print('the arguments must be integers')
 
     if location > len(puzzles):
-        print("can't move puzzle to that location. location out of bounds")
+        user_state.message = "can't move puzzle to that location. location out of bounds"
         return
 
     try: os.rename(f'{puzzle_path}{puzzle_number}.json', f'{puzzle_path}moving.json')
     except: 
-        print("puzzle does not exist!")
+        user_state.message = f"puzzle {puzzle_number} does not exist!"
         return
     print('Moving Puzzles...')
     #Renames puzzles in front of puzzle
@@ -216,6 +217,18 @@ def delete_puzzle(puzzle_number):
     if len(os.listdir(puzzle_path)) == 0:
         os.rmdir(puzzle_path)
 
+def view_series(series):
+    puzzle_path = user_state.get_puzzle_path(user_state.series)
+    try: os.listdir(puzzle_path)
+    except: user_state.message = "This series doesn't have any puzzles in it!"; return
+    number_of_puzzles_in_series = len(os.listdir(puzzle_path))
+    report = f'Levels in {series}\n\nNumber of puzzles: {number_of_puzzles_in_series}\n\n'
+    for puzzle in range(number_of_puzzles_in_series):
+        with open(f'{puzzle_path}{puzzle + 1}.json', 'r') as f:
+            report += f"Level {puzzle + 1}\n\n{display_puzzle(json.load(f))}\n"
+    os.system(f'echo "{report}" | more' if os.name == 'nt' else f'echo "{report}" | less')
+
+
 
 
 
@@ -267,6 +280,8 @@ def read_input(user_input):
             load_puzzle(puzzle_integer)
         case 'q':
             exit()
+        case 'v':
+            view_series(user_state.series)
         case 'w':
             try:
                 save_puzzle(len(os.listdir(user_state.get_puzzle_path(user_state.series))) + 1)
@@ -280,8 +295,10 @@ def read_input(user_input):
             puzzle_integer = input("What puzzle do you want to delete?: ")
             delete_puzzle(puzzle_integer)
         case 'm':
-            puzzle_integer = input('Where puzzle do you want to move?: ')
-            location = input('Where do you want to move the puzzle? :')
+            try: puzzle_integer = int(input('Where puzzle do you want to move?: '))
+            except: user_state.message = "Not a number"; return
+            try: location = int(input('Where do you want to move the puzzle? :'))
+            except: user_state.message = "Not a number"; return
             move_puzzle(puzzle_integer, location)
         case '?':
             os.system('more ..\\docs\\creating-puzzles.txt' if os.name == 'nt' else 'less ../docs/creating-puzzles.txt')
@@ -293,7 +310,7 @@ def read_input(user_input):
 user_state = State({}, 'Welcome to Python Words! Type "?" for help', '', 'Custom')
 while True:
     os.system('cls' if os.name == 'nt' else 'clear')
-    display_puzzle(user_state.puzzle)
+    print(display_puzzle(user_state.puzzle))
     print(f"SERIES: {user_state.series}")
     print(f"{user_state.message}\n\n")
     user_input = input()
