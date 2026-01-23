@@ -30,8 +30,7 @@ def display_puzzle(puzzle):
         words.append(word)
     for j in range(15):
         displayed_puzzle += f"\n{''.join(display[j])}{j}"
-    displayed_puzzle += '\n012345678901234'
-    displayed_puzzle += f'\nwords: {user_state.puzzle}\n'
+    displayed_puzzle += '\n012345678901234\n'
 
     #Prints letters used in the puzzle
     letters = []
@@ -203,7 +202,7 @@ def delete_puzzle(puzzle_number):
     except: print('the argument must be an integer')
     try: os.remove(f'{puzzle_path}{puzzle_number}.json')
     except: 
-        user_state.message = "puzzle does not exist!"
+        user_state.message = f"puzzle {puzzle_number} does not exist!"
         return
     puzzles = os.listdir(puzzle_path)
     n = puzzle_number
@@ -229,13 +228,13 @@ def view_series(series):
             report += f"Level {puzzle + 1}\n\n{display_puzzle(json.load(f))}\n"
     os.system(f'echo "{report}" | more' if os.name == 'nt' else f'echo "{report}" | less')
 
-def print_selected_word():
-    if user_state.selected != "":
-        if user_state.puzzle[user_state.selected]['direction'] == 'r':
-            stdscr.addstr(1 + user_state.puzzle[user_state.selected]['y'], user_state.puzzle[user_state.selected]['x'], user_state.selected, curses.A_BOLD)
+def print_bold_word(word):
+    if word != "":
+        if user_state.puzzle[word]['direction'] == 'r':
+            stdscr.addstr(1 + user_state.puzzle[word]['y'], user_state.puzzle[word]['x'], word, curses.A_BOLD)
         else:
-            for i in range(len(user_state.selected)):
-                stdscr.addstr(1 + user_state.puzzle[user_state.selected]['y'] + i, user_state.puzzle[user_state.selected]['x'], user_state.selected[i], curses.A_BOLD)
+            for i in range(len(word)):
+                stdscr.addstr(1 + user_state.puzzle[word]['y'] + i, user_state.puzzle[word]['x'], word[i], curses.A_BOLD)
 
 def input_string(message, tab_behavior):
     if tab_behavior == "words":
@@ -329,9 +328,12 @@ def read_input(user_input):
         case 'c':
             user_state.series = input_string("Enter the name of a series you want to create/edit: ", 'series')
         case 'o':
+            try: os.listdir(user_state.get_puzzle_path(user_state.series))
+            except: user_state.message = "The series you are editing contains no puzzles"; return
             puzzle_integer = input_string('Enter a puzzle number to load: ', 'puzzles')
             load_puzzle(puzzle_integer)
         case 'q':
+            curses.endwin()
             exit()
         case 'v':
             view_series(user_state.series)
@@ -345,9 +347,13 @@ def read_input(user_input):
             except: user_state.message = "Not a number"; return
             save_puzzle(requested_integer)
         case 'x':
+            try: os.listdir(user_state.get_puzzle_path(user_state.series))
+            except: user_state.message = "The series you are editing contains no puzzles"; return
             puzzle_integer = input_string("What puzzle do you want to delete?: ", 'puzzles')
             delete_puzzle(puzzle_integer)
         case 'm':
+            try: os.listdir(user_state.get_puzzle_path(user_state.series))
+            except: user_state.message = "The series you are editing contains no puzzles"; return
             try: puzzle_integer = int(input_string('Where puzzle do you want to move?: ', 'puzzles'))
             except: user_state.message = "Not a number"; return
             try: location = int(input_string('Where do you want to move the puzzle? :', 'puzzles'))
@@ -367,7 +373,10 @@ while True:
     stdscr.addstr(display_puzzle(user_state.puzzle))
     stdscr.addstr(f"SERIES: {user_state.series}\n")
     stdscr.addstr(f"{user_state.message}\n\n")
-    print_selected_word()
+    print_bold_word(user_state.selected)
     stdscr.addstr(23, 0, "")
-    key = stdscr.getch() 
-    read_input(chr(key))
+    try:
+        key = stdscr.getch() 
+        read_input(chr(key))
+    except KeyboardInterrupt:
+        user_state.message = "Press 'q' to exit the program"
