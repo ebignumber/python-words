@@ -6,8 +6,6 @@ d: Delete a word from the current puzzle
 
 MOVEMENT COMMANDS
 
-Note: all movement commands (except for r) can have a number behind it so that the word moves more than one space. For example, running 2l moves the selected word two spaces to the right and 8k moves the word eight spaces upwards.
-
 h: Move selected word to the left
 j: Move selected word downwards
 k: Move selected word upwards
