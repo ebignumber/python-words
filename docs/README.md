@@ -57,11 +57,27 @@ Open a file named "puzzle-creator.py" and start work.
 
 When you first start, you will be greeted by this screen:
 
-    Type "help" for help
-
-    puzzle_creator/Custom$ 
-
-Here you type commands to make puzzles and write them to files. The data is stored in .json files once you save it.
+    _______________                          
+                   0                       
+                   1
+                   2
+                   3                                              
+                   4                
+                   5                  
+                   6                    
+                   7                
+                   8                       
+                   9                                                              
+                   10
+                   11                                  
+                   12              
+                   13            
+                   14                              
+    012345678901234                          
+                              
+    Letters: []                                  
+    SERIES: Custom       
+    Welcome to Python Words! Type "?" for help   
 
 ## How are my puzzles stored?
 
