@@ -92,7 +92,7 @@ def save_puzzle(puzzle_integer):
     except:
         with open(f'{puzzle_path}{puzzle_integer}.json', 'w') as f:
             json.dump(user_state.puzzle, f, indent=4)
-            user_state.message = 'Puzzle {puzzle_integer} was overwritten'
+            user_state.message = f'Puzzle {puzzle_integer} was overwritten'
 
 def load_puzzle(name):
     puzzle_path = user_state.get_puzzle_path(user_state.series)

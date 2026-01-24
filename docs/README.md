@@ -13,6 +13,10 @@ To play the game just go to the game directory and run the wordfinder.py file li
 
 This game requires Python; I made this using Python 3.12.3, and it will likely work on other version, but I haven't tested Word Finder on any of them.
 
+If you are trying to use the puzzle editor in a Windows system, you will need to install the windows-curses module. You may run the following command to do so:
+
+    pip install windows-curses
+
 ## How to play?
 
 Once you run the wordfinder.py file you will be greeted with this screen:
