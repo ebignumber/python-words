@@ -68,10 +68,6 @@ def remove_word(word):
 def select_word(word):
     if not word.upper() in user_state.puzzle:
         user_state.message = "Word not found in puzzle"
-        return
-    elif word.upper() in user_state.selected:
-        user_state.message = "Word already selected!"
-        return
     else:
         user_state.selected = [word.upper()]
         user_state.message = f"word {word.upper()} selected"
