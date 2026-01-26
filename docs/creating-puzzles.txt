@@ -2,6 +2,7 @@ WORD COMMANDS
 
 a: Add a word to the current puzzle
 s: Select a word to move
+S: Select all words to move matching a regular expression
 d: Delete a word from the current puzzle
 
 MOVEMENT COMMANDS

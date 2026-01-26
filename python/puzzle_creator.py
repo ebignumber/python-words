@@ -1,4 +1,4 @@
-import os; import json; import curses
+import os; import json; import curses; import re
 os.chdir(os.path.dirname(__file__))
 
 class State:
@@ -48,12 +48,15 @@ def display_puzzle(puzzle):
     return displayed_puzzle
 
 def add_word(word):
-    user_state.puzzle.__setitem__(word.upper(), {'direction':'r', 'x':0, 'y':0})
-    user_state.message = f"word {word.upper()} added to puzzle"
+    if word.isalpha():
+        user_state.puzzle.__setitem__(word.upper(), {'direction':'r', 'x':0, 'y':0})
+        user_state.message = f"word {word.upper()} added to puzzle"
+    else:
+        user_state.message = "Invalid word"
 
 def remove_word(word):
-    if user_state.selected == word.upper():
-        user_state.selected = ""
+    if word.upper() in user_state.selected:
+        user_state.selected.remove(word.upper())
     try:
         user_state.puzzle.pop(word.upper())
         return
@@ -64,9 +67,25 @@ def remove_word(word):
 
 def select_word(word):
     if not word.upper() in user_state.puzzle:
+        user_state.message = "Word not found in puzzle"
         return
-    user_state.selected = word.upper()
-    user_state.message = f"word {word.upper()} selected"
+    elif word.upper() in user_state.selected:
+        user_state.message = "Word already selected!"
+        return
+    else:
+        user_state.selected = [word.upper()]
+        user_state.message = f"word {word.upper()} selected"
+
+def select_words_by_regexp(regexp):
+    user_state.selected = []
+    words = list(user_state.puzzle.keys())
+    for word in words:
+        match_uppercase = re.search(regexp, word)
+        match_lowercase = re.search(regexp, word.lower())
+        if match_uppercase or match_lowercase:
+            user_state.selected.append(word)
+
+
 
 def save_puzzle(puzzle_integer):
     puzzle_path = user_state.get_puzzle_path(user_state.series)
@@ -100,7 +119,7 @@ def load_puzzle(name):
         with open(f'{puzzle_path}{name}.json', 'r') as f:
             user_state.puzzle = json.load(f)
             user_state.message = f"loaded {name}"
-            user_state.selected = ''
+            user_state.selected = []
     except:
         user_state.message = f'Puzzle {name} doesn\'t exist'
 
@@ -149,8 +168,8 @@ def move_puzzle(puzzle_number, location):
 
 
 
-def move_word(word, x, y):
-    if not user_state.selected:
+def move_words(words, x, y):
+    if not words:
         user_state.message = "Cannot move word. Word not selected"
         return
     try:
@@ -160,40 +179,43 @@ def move_word(word, x, y):
         user_state.message = "x and y coordinates must be integers"
         return
     #test if word is out of bounds if moved
-    word_x = user_state.puzzle[user_state.selected]['x']
-    word_y = user_state.puzzle[user_state.selected]['y']
-    word_direction = user_state.puzzle[word.upper()]['direction']
-    OUT_OF_BOUNDS = (len(word) + x + word_x - 1 > 14 and word_direction == 'r') or (len(word) + y + word_y - 1 > 14 and word_direction == 'd') or (x + word_x < 0 or x + word_x > 14) or (y + word_y < 0 or y + word_y > 14)
-    if OUT_OF_BOUNDS:
-        user_state.message = f'Could not move {word}, it would go out of bounds'
-        return
+    for word in words:
+        word_x = user_state.puzzle[word]['x']
+        word_y = user_state.puzzle[word]['y']
+        word_direction = user_state.puzzle[word]['direction']
+        OUT_OF_BOUNDS = (len(word) + x + word_x - 1 > 14 and word_direction == 'r') or (len(word) + y + word_y - 1 > 14 and word_direction == 'd') or (x + word_x < 0 or x + word_x > 14) or (y + word_y < 0 or y + word_y > 14)
+        if OUT_OF_BOUNDS:
+            user_state.message = f'Could not move {word}, it would go out of bounds'
+            return
     #moves the word
-    try:
-        user_state.puzzle[word.upper()]['x'] = user_state.puzzle[word.upper()]['x'] + x
-        user_state.puzzle[word.upper()]['y'] = user_state.puzzle[word.upper()]['y'] + y
-        user_state.message = f"word {word} was moved to coordinates {word_x + x},{word_y + y}"
-    except:
-        user_state.message = f'Could not find the word to move {word}'
+    for word in words:
+        try:
+            user_state.puzzle[word]['x'] = user_state.puzzle[word]['x'] + x
+            user_state.puzzle[word]['y'] = user_state.puzzle[word]['y'] + y
+            user_state.message = f"word {word} was moved to coordinates {word_x + x},{word_y + y}"
+        except:
+            user_state.message = f'Could not find the word to move {word}'
 
-def rotate_word(word):
-    if user_state.selected == '':
-        user_state.message = "No word is selected to rotate"
+def rotate_words(words):
+    if not user_state.selected:
+        user_state.message = "No words are selected to rotate"
         return
-    word_x = user_state.puzzle[word.upper()]['x']
-    word_y = user_state.puzzle[word.upper()]['y']
-    word_direction = user_state.puzzle[word.upper()]['direction']
+    for word in words:
+        word_x = user_state.puzzle[word]['x']
+        word_y = user_state.puzzle[word]['y']
+        word_direction = user_state.puzzle[word]['direction']
 
-    #test if word is out of bounds if rotated
-    if (len(word) + word_x - 1 > 14 and word_direction == 'd') or (len(word) + word_y - 1 > 14 and word_direction == 'r'):
-        user_state.message = f'Could not rotate {word}, it would go out of bounds'
-        return
+        #test if word is out of bounds if rotated
+        if (len(word) + word_x - 1 > 14 and word_direction == 'd') or (len(word) + word_y - 1 > 14 and word_direction == 'r'):
+            user_state.message = f'Could not rotate {word}, it would go out of bounds'
+            return
     #rotates the word
-    if user_state.puzzle[word.upper()]['direction'] == 'r':
-        user_state.puzzle[word.upper()]['direction'] = 'd'
-    else:
-        user_state.puzzle[word.upper()]['direction'] = 'r'
-    user_state.message = f"word {word} was rotated"
-    return
+    for word in words:
+        if user_state.puzzle[word]['direction'] == 'r':
+            user_state.puzzle[word]['direction'] = 'd'
+        else:
+            user_state.puzzle[word]['direction'] = 'r'
+        user_state.message = f"words rotated"
  
 
 def delete_puzzle(puzzle_number):
@@ -247,7 +269,7 @@ def input_string(message, tab_behavior):
             tab_array.append(str(i + 1))
     else:
         tab_array = []
-    input_str = ''
+    input_str = r''
     times_pressed_tab = 0
     puzzle = user_state.puzzle
     while True:
@@ -296,7 +318,8 @@ def read_input(user_input):
                 user_state.message = "Word must be less than 16 characters long!"
                 return
             add_word(word)
-            select_word(word)
+            if not word.upper() in user_state.selected and word.upper() in list(user_state.puzzle.keys()):
+                select_word(word)
         case 'd':
             word = input_string("What word do you want to delete? ", 'words')
             if not word:
@@ -313,17 +336,20 @@ def read_input(user_input):
                 user_state.message = f"Can't select {word}. word not in puzzle"
                 return
             select_word(word)
+        case 'S':
+            regexp = input_string("Select words in a regular expression ", 'null')
+            select_words_by_regexp(regexp)
     #MOVEMENT COMMANDS
         case 'h':
-            move_word(user_state.selected, -1, 0)
+            move_words(user_state.selected, -1, 0)
         case 'j':
-            move_word(user_state.selected, 0, 1)
+            move_words(user_state.selected, 0, 1)
         case 'k':
-            move_word(user_state.selected, 0, -1)
+            move_words(user_state.selected, 0, -1)
         case 'l':
-            move_word(user_state.selected, 1, 0)
+            move_words(user_state.selected, 1, 0)
         case 'r':
-            rotate_word(user_state.selected)
+            rotate_words(user_state.selected)
     #SERIES COMMANDS 
         case 'c':
             user_state.series = input_string("Enter the name of a series you want to create/edit: ", 'series')
@@ -366,14 +392,15 @@ def read_input(user_input):
 
 
 #Allows user to input commands
-user_state = State({}, 'Welcome to Python Words! Type "?" for help', '', 'Custom')
+user_state = State({}, 'Welcome to Python Words! Type "?" for help', [], 'Custom')
 stdscr = curses.initscr()
 while True:
     stdscr.clear()
     stdscr.addstr(display_puzzle(user_state.puzzle))
     stdscr.addstr(f"SERIES: {user_state.series}\n")
     stdscr.addstr(f"{user_state.message}\n\n")
-    print_bold_word(user_state.selected)
+    for i in user_state.selected:
+        print_bold_word(i)
     stdscr.addstr(23, 0, "")
     try:
         key = stdscr.getch() 
