@@ -66,7 +66,6 @@ def remove_word(word):
 def remove_words_by_regexp(regexp):
     words = list(user_state.puzzle.keys())
     for word in words:
-        print('\ntest')
         match_uppercase = re.search(regexp, word)
         match_lowercase = re.search(regexp, word.lower())
         if match_uppercase or match_lowercase:
@@ -162,7 +161,7 @@ def move_puzzle(puzzle_number, location):
     #Renames puzzles in front of new puzzle location
     n = len(puzzles) - 1
     while n >= location:
-        try: os.rename(f'{puzzle_path}{n}.json', f'{puzzle_path}{n + 1}.json'); print(f'Moved puzzle {n} to {n + 1}')
+        try: os.rename(f'{puzzle_path}{n}.json', f'{puzzle_path}{n + 1}.json')
         except:
             stdscr.clear();
             stdscr.addstr(f"an error occurred: could not find puzzle {n} in {user_state.series}\nPlease make sure that all the puzzles in the series are integers and that no numbers are missing\n\n\nPress any key to continue") 
@@ -229,7 +228,7 @@ def rotate_words(words):
 def delete_puzzle(puzzle_number):
     puzzle_path = user_state.get_puzzle_path(user_state.series)
     try: puzzle_number = int(puzzle_number)
-    except: print('the argument must be an integer')
+    except: user_state.message = 'the argument must be an integer'
     try: os.remove(f'{puzzle_path}{puzzle_number}.json')
     except: 
         user_state.message = f"puzzle {puzzle_number} does not exist!"
