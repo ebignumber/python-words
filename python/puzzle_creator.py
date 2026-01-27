@@ -63,6 +63,18 @@ def remove_word(word):
     except:
         user_state.message = f'Could not find the word {word} to remove'
 
+def remove_words_by_regexp(regexp):
+    words = list(user_state.puzzle.keys())
+    for word in words:
+        print('\ntest')
+        match_uppercase = re.search(regexp, word)
+        match_lowercase = re.search(regexp, word.lower())
+        if match_uppercase or match_lowercase:
+            if word in user_state.selected:
+                user_state.selected.remove(word)
+            user_state.puzzle.pop(word)
+
+   
 
 
 def select_word(word):
@@ -293,7 +305,7 @@ def input_string(message, tab_behavior):
                     with open(f'{user_state.get_puzzle_path(user_state.series)}{tab_array[times_pressed_tab % len(tab_array)] }.json', 'r') as f:
                         puzzle = json.load(f)
         elif key == 27: #27 is for the escape key
-            return
+            return ''
         elif 0 <= key <= 255:
             input_str += chr(key)
 
@@ -324,6 +336,9 @@ def read_input(user_input):
                 user_state.message = f"Can't delete {word}. word not in puzzle"
                 return
             remove_word(word)
+        case 'D':
+            regexp = input_string("Delete words matching a regular expression ", 'null')
+            remove_words_by_regexp(regexp)
         case 's':
             word = input_string("Select a word ", 'words')
             if not word:
@@ -348,7 +363,9 @@ def read_input(user_input):
             rotate_words(user_state.selected)
     #SERIES COMMANDS 
         case 'c':
-            user_state.series = input_string("Enter the name of a series you want to create/edit: ", 'series')
+            series = input_string("Enter the name of a series you want to create/edit: ", 'series')
+            if series.isalnum():
+                user_state.series = series
         case 'o':
             try: os.listdir(user_state.get_puzzle_path(user_state.series))
             except: user_state.message = "The series you are editing contains no puzzles"; return
