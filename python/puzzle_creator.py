@@ -7,8 +7,19 @@ class State:
         self.message = message
         self.selected = selected
         self.series = series
-    def get_puzzle_path(s, series):
-        return f'..{os.path.sep}Puzzles{os.path.sep}{series}{os.path.sep}'
+    def get_puzzle_path(self):
+        return f'..{os.path.sep}Puzzles{os.path.sep}{self.series}{os.path.sep}'
+    def get_words_from_puzzle(self):
+        return list(self.puzzle.keys())
+    def get_words_matching_regexp(self, regexp):
+        words = list(self.puzzle.keys())
+        matches = []
+        for word in words:
+            match_uppercase = re.search(regexp, word)
+            match_lowercase = re.search(regexp, word.lower())
+            if match_uppercase or match_lowercase:
+                matches.append(word)
+        return matches
 
 #Displays the puzzle and gives details about it
 def display_puzzle(puzzle):
@@ -64,14 +75,12 @@ def remove_word(word):
         user_state.message = f'Could not find the word {word} to remove'
 
 def remove_words_by_regexp(regexp):
-    words = list(user_state.puzzle.keys())
-    for word in words:
-        match_uppercase = re.search(regexp, word)
-        match_lowercase = re.search(regexp, word.lower())
-        if match_uppercase or match_lowercase:
+    words_to_remove = user_state.get_words_matching_regexp(regexp)
+    for word in words_to_remove:
             if word in user_state.selected:
                 user_state.selected.remove(word)
-            user_state.puzzle.pop(word)
+            if word in user_state.puzzle:
+                user_state.puzzle.pop(word)
 
    
 
@@ -84,18 +93,10 @@ def select_word(word):
         user_state.message = f"word {word.upper()} selected"
 
 def select_words_by_regexp(regexp):
-    user_state.selected = []
-    words = list(user_state.puzzle.keys())
-    for word in words:
-        match_uppercase = re.search(regexp, word)
-        match_lowercase = re.search(regexp, word.lower())
-        if match_uppercase or match_lowercase:
-            user_state.selected.append(word)
-
-
+    user_state.selected = user_state.get_words_matching_regexp(regexp)
 
 def save_puzzle(puzzle_integer):
-    puzzle_path = user_state.get_puzzle_path(user_state.series)
+    puzzle_path = user_state.get_puzzle_path()
     try: os.listdir(puzzle_path)
     except: 
         if puzzle_integer == 1:
@@ -121,7 +122,7 @@ def save_puzzle(puzzle_integer):
             user_state.message = f'Puzzle {puzzle_integer} was overwritten'
 
 def load_puzzle(name):
-    puzzle_path = user_state.get_puzzle_path(user_state.series)
+    puzzle_path = user_state.get_puzzle_path()
     try:
         with open(f'{puzzle_path}{name}.json', 'r') as f:
             user_state.puzzle = json.load(f)
@@ -131,7 +132,7 @@ def load_puzzle(name):
         user_state.message = f'Puzzle {name} doesn\'t exist'
 
 def move_puzzle(puzzle_number, location):
-    puzzle_path = user_state.get_puzzle_path(user_state.series)
+    puzzle_path = user_state.get_puzzle_path()
     puzzles = os.listdir(puzzle_path)
     try: 
         puzzle_number = int(puzzle_number)
@@ -226,7 +227,7 @@ def rotate_words(words):
  
 
 def delete_puzzle(puzzle_number):
-    puzzle_path = user_state.get_puzzle_path(user_state.series)
+    puzzle_path = user_state.get_puzzle_path()
     try: puzzle_number = int(puzzle_number)
     except: user_state.message = 'the argument must be an integer'
     try: os.remove(f'{puzzle_path}{puzzle_number}.json')
@@ -247,7 +248,7 @@ def delete_puzzle(puzzle_number):
         os.rmdir(puzzle_path)
 
 def view_series(series):
-    puzzle_path = user_state.get_puzzle_path(user_state.series)
+    puzzle_path = user_state.get_puzzle_path()
     try: os.listdir(puzzle_path)
     except: user_state.message = "This series doesn't have any puzzles in it!"; return
     number_of_puzzles_in_series = len(os.listdir(puzzle_path))
@@ -265,19 +266,19 @@ def print_bold_word(word):
             for i in range(len(word)):
                 stdscr.addstr(1 + user_state.puzzle[word]['y'] + i, user_state.puzzle[word]['x'], word[i], curses.A_BOLD)
 
-def input_string(message, tab_behavior):
-    if tab_behavior == "words":
-        tab_array = list(user_state.puzzle.keys())
-    elif tab_behavior == "series":
+def input_string(message, behavior):
+    if behavior == "words":
+        tab_array = user_state.get_words_from_puzzle()
+    elif behavior == "series":
         tab_array = os.listdir(f"..{os.path.sep}Puzzles")
-    elif tab_behavior == "puzzles":
+    elif behavior == "puzzles":
         tab_array = []
-        for i in range(len(os.listdir(user_state.get_puzzle_path(user_state.series)))):
+        for i in range(len(os.listdir(user_state.get_puzzle_path()))):
             tab_array.append(str(i + 1))
     else:
         tab_array = []
     input_str = r''
-    times_pressed_tab = 0
+    times_pressed_tab = -1
     puzzle = user_state.puzzle
     while True:
         stdscr.clear()
@@ -288,7 +289,10 @@ def input_string(message, tab_behavior):
 
         stdscr.addstr("> " + input_str)
         stdscr.refresh()
-
+        if behavior == 'regexp':
+            for i in user_state.get_words_matching_regexp(input_str):
+                print_bold_word(i)
+            stdscr.addstr(23, len(message) + 4 + len(input_str), '')
         key = stdscr.getch()
         
         if key == curses.KEY_BACKSPACE or key == 127:
@@ -299,15 +303,16 @@ def input_string(message, tab_behavior):
             if(tab_array):
                 times_pressed_tab += 1
                 input_str = tab_array[times_pressed_tab % len(tab_array)]
-                if(tab_behavior == "puzzles"):
+                if(behavior == "puzzles"):
                     user_state.message = f"There are {len(tab_array)} puzzles in this series"
-                    with open(f'{user_state.get_puzzle_path(user_state.series)}{tab_array[times_pressed_tab % len(tab_array)] }.json', 'r') as f:
+                    with open(f'{user_state.get_puzzle_path()}{tab_array[times_pressed_tab % len(tab_array)] }.json', 'r') as f:
                         puzzle = json.load(f)
         elif key == 27: #27 is for the escape key
             return ''
         elif 0 <= key <= 255:
             input_str += chr(key)
 
+        user_state.get_words_matching_regexp(input_str)
         stdscr.clear()
         stdscr.addstr(f"{message}:\n")
 
@@ -325,7 +330,7 @@ def read_input(user_input):
                 user_state.message = "Word must be less than 16 characters long!"
                 return
             add_word(word)
-            if not word.upper() in user_state.selected and word.upper() in list(user_state.puzzle.keys()):
+            if not word.upper() in user_state.selected and word.upper() in user_state.get_words_from_puzzle():
                 select_word(word)
         case 'd':
             word = input_string("What word do you want to delete? ", 'words')
@@ -336,7 +341,7 @@ def read_input(user_input):
                 return
             remove_word(word)
         case 'D':
-            regexp = input_string("Delete words matching a regular expression ", 'null')
+            regexp = input_string("Delete words matching a regular expression ", 'regexp')
             remove_words_by_regexp(regexp)
         case 's':
             word = input_string("Select a word ", 'words')
@@ -347,7 +352,7 @@ def read_input(user_input):
                 return
             select_word(word)
         case 'S':
-            regexp = input_string("Select words in a regular expression ", 'null')
+            regexp = input_string("Select words in a regular expression ", 'regexp')
             select_words_by_regexp(regexp)
     #MOVEMENT COMMANDS
         case 'h':
@@ -366,7 +371,7 @@ def read_input(user_input):
             if series.isalnum():
                 user_state.series = series
         case 'o':
-            try: os.listdir(user_state.get_puzzle_path(user_state.series))
+            try: os.listdir(user_state.get_puzzle_path())
             except: user_state.message = "The series you are editing contains no puzzles"; return
             puzzle_integer = input_string('Enter a puzzle number to load: ', 'puzzles')
             load_puzzle(puzzle_integer)
@@ -377,7 +382,7 @@ def read_input(user_input):
             view_series(user_state.series)
         case 'w':
             try:
-                save_puzzle(len(os.listdir(user_state.get_puzzle_path(user_state.series))) + 1)
+                save_puzzle(len(os.listdir(user_state.get_puzzle_path())) + 1)
             except:
                 save_puzzle(1)
         case 'W':
@@ -385,12 +390,12 @@ def read_input(user_input):
             except: user_state.message = "Not a number"; return
             save_puzzle(requested_integer)
         case 'x':
-            try: os.listdir(user_state.get_puzzle_path(user_state.series))
+            try: os.listdir(user_state.get_puzzle_path())
             except: user_state.message = "The series you are editing contains no puzzles"; return
             puzzle_integer = input_string("What puzzle do you want to delete?: ", 'puzzles')
             delete_puzzle(puzzle_integer)
         case 'm':
-            try: os.listdir(user_state.get_puzzle_path(user_state.series))
+            try: os.listdir(user_state.get_puzzle_path())
             except: user_state.message = "The series you are editing contains no puzzles"; return
             try: puzzle_integer = int(input_string('Where puzzle do you want to move?: ', 'puzzles'))
             except: user_state.message = "Not a number"; return
