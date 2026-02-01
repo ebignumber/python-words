@@ -7,7 +7,7 @@
 
 ## What is Python Words?
 
-Word Finder is a game that is supposed to be like those word puzzle games on Google Play, only here, you play in a terminal, and you can create your own puzzles if you really wanted to.
+Python Words is a game that is supposed to be like those word puzzle games on Google Play, only here, you play in a terminal, and you can create your own puzzles if you really wanted to.
 
 ## How do you start the game?
 
