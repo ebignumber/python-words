@@ -293,6 +293,10 @@ def input_string(message, behavior):
             for i in user_state.get_words_matching_regexp(input_str):
                 print_bold_word(i)
             stdscr.addstr(23, len(message) + 4 + len(input_str), '')
+        elif behavior == 'words':
+            if input_str.upper() in user_state.puzzle:
+                print_bold_word(input_str.upper())
+                stdscr.addstr(23, len(message) + 4 + len(input_str), '')
         key = stdscr.getch()
         
         if key == curses.KEY_BACKSPACE or key == 127:
