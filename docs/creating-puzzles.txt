@@ -8,10 +8,10 @@ D: Delete all words matching a regular expression
 
 MOVEMENT COMMANDS
 
-h: Move selected word to the left
-j: Move selected word downwards
-k: Move selected word upwards
-l: Move selected word to the right
+h | Left Arrow: Move selected word to the left
+j | Down Arrow: Move selected word downwards
+k | Up Arrow: Move selected word upwards
+l | Right Arrow: Move selected word to the right
 r: Rotate selected word
 
 SERIES COMMANDS
