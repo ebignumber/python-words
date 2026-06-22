@@ -347,7 +347,7 @@ def read_input(user_input):
         case 'D':
             regexp = input_string("Delete words matching a regular expression ", 'regexp')
             remove_words_by_regexp(regexp)
-        case 's':
+        case key if key == ord('s'):
             word = input_string("Select a word ", 'words')
             if not word:
                 return
@@ -359,13 +359,13 @@ def read_input(user_input):
             regexp = input_string("Select words in a regular expression ", 'regexp')
             select_words_by_regexp(regexp)
     #MOVEMENT COMMANDS
-        case 'h':
+        case key if key == 'h' or key == chr(curses.KEY_LEFT):
             move_words(user_state.selected, -1, 0)
-        case 'j':
+        case key if key == 'j' or key == chr(curses.KEY_DOWN):
             move_words(user_state.selected, 0, 1)
-        case 'k':
+        case key if key == 'k' or key == chr(curses.KEY_UP):
             move_words(user_state.selected, 0, -1)
-        case 'l':
+        case key if key == 'l' or key == chr(curses.KEY_RIGHT):
             move_words(user_state.selected, 1, 0)
         case 'r':
             rotate_words(user_state.selected)
@@ -374,7 +374,7 @@ def read_input(user_input):
             series = input_string("Enter the name of a series you want to create/edit: ", 'series')
             if series.isalnum():
                 user_state.series = series
-        case 'o':
+        case key if key == ord('o'):
             try: os.listdir(user_state.get_puzzle_path())
             except: user_state.message = "The series you are editing contains no puzzles"; return
             puzzle_integer = input_string('Enter a puzzle number to load: ', 'puzzles')
@@ -406,7 +406,7 @@ def read_input(user_input):
             try: location = int(input_string('Where do you want to move the puzzle? :', 'puzzles'))
             except: user_state.message = "Not a number"; return
             move_puzzle(puzzle_integer, location)
-        case '?':
+        case key if key == '?' or key == chr(curses.KEY_HELP):
             os.system('more ..\\docs\\creating-puzzles.txt' if os.name == 'nt' else 'less ../docs/creating-puzzles.txt')
         case _:
             return
@@ -415,6 +415,8 @@ def read_input(user_input):
 #Allows user to input commands
 user_state = State({}, 'Welcome to Python Words! Type "?" for help', [], 'Custom')
 stdscr = curses.initscr()
+
+stdscr.keypad(True)
 while True:
     stdscr.clear()
     stdscr.addstr(display_puzzle(user_state.puzzle))
@@ -424,7 +426,7 @@ while True:
         print_bold_word(i)
     stdscr.addstr(23, 0, "")
     try:
-        key = stdscr.getch() 
+        key = stdscr.getch()
         read_input(chr(key))
     except KeyboardInterrupt:
         user_state.message = "Press 'q' to exit the program"
