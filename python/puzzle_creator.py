@@ -347,7 +347,7 @@ def read_input(user_input):
         case 'D':
             regexp = input_string("Delete words matching a regular expression ", 'regexp')
             remove_words_by_regexp(regexp)
-        case key if key == ord('s'):
+        case 's':
             word = input_string("Select a word ", 'words')
             if not word:
                 return
@@ -374,7 +374,7 @@ def read_input(user_input):
             series = input_string("Enter the name of a series you want to create/edit: ", 'series')
             if series.isalnum():
                 user_state.series = series
-        case key if key == ord('o'):
+        case 'o':
             try: os.listdir(user_state.get_puzzle_path())
             except: user_state.message = "The series you are editing contains no puzzles"; return
             puzzle_integer = input_string('Enter a puzzle number to load: ', 'puzzles')
