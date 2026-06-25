@@ -1,6 +1,8 @@
 import os; import json; import curses; import re
 os.chdir(os.path.dirname(__file__))
 
+PUZZLE_WIDTH = 15
+
 class State:
     def __init__(self, puzzle, message, selected, series):
         self.puzzle = puzzle
@@ -33,13 +35,13 @@ def display_puzzle(puzzle):
 
 
 
-    display = [[' ' for _ in range(15)] for _ in range(15)]
+    display = [[' ' for _ in range(PUZZLE_WIDTH)] for _ in range(PUZZLE_WIDTH)]
     words = []
     displayed_puzzle += '_______________'
     for word in list(puzzle.keys()):
         print_word_to_puzzle(puzzle[word]['direction'], puzzle[word]['x'], puzzle[word]['y'], word)
         words.append(word)
-    for j in range(15):
+    for j in range(PUZZLE_WIDTH):
         displayed_puzzle += f"\n{''.join(display[j])}{j}"
     displayed_puzzle += '\n012345678901234\n'
 
@@ -186,23 +188,29 @@ def move_words(words, x, y):
     except:
         user_state.message = "x and y coordinates must be integers"
         return
-    #test if word is out of bounds if moved
     for word in words:
         word_x = user_state.puzzle[word]['x']
         word_y = user_state.puzzle[word]['y']
         word_direction = user_state.puzzle[word]['direction']
-        OUT_OF_BOUNDS = (len(word) + x + word_x - 1 > 14 and word_direction == 'r') or (len(word) + y + word_y - 1 > 14 and word_direction == 'd') or (x + word_x < 0 or x + word_x > 14) or (y + word_y < 0 or y + word_y > 14)
-        if OUT_OF_BOUNDS:
-            user_state.message = f'Could not move {word}, it would go out of bounds'
-            return
-    #moves the word
-    for word in words:
-        try:
+        #Move word in x direction
+        if (len(word) + x + word_x > PUZZLE_WIDTH and word_direction == 'r') or word_x + x + 1 > PUZZLE_WIDTH:
+            user_state.puzzle[word]['x'] = 0
+        elif word_x + x < 0 and word_direction == 'r':
+            user_state.puzzle[word]['x'] = PUZZLE_WIDTH - len(word)
+        elif word_x + x < 0 and word_direction == 'd':
+            user_state.puzzle[word]['x'] = PUZZLE_WIDTH - 1
+        else:
             user_state.puzzle[word]['x'] = user_state.puzzle[word]['x'] + x
+
+        #Move word in y direction
+        if (len(word) + y + word_y > PUZZLE_WIDTH and word_direction == 'd') or word_y + y + 1 > PUZZLE_WIDTH:
+            user_state.puzzle[word]['y'] = 0
+        elif word_y + y < 0 and word_direction == 'd':
+            user_state.puzzle[word]['y'] = PUZZLE_WIDTH - len(word)
+        elif word_y + y < 0 and word_direction == 'r':
+            user_state.puzzle[word]['y'] = PUZZLE_WIDTH - 1
+        else:
             user_state.puzzle[word]['y'] = user_state.puzzle[word]['y'] + y
-            user_state.message = f"word {word} was moved to coordinates {word_x + x},{word_y + y}"
-        except:
-            user_state.message = f'Could not find the word to move {word}'
 
 def rotate_words(words):
     if not user_state.selected:
@@ -330,8 +338,8 @@ def read_input(user_input):
             word = input_string("What word do you want to add? ", 'null')
             if not word:
                 return
-            if len(word) > 15:
-                user_state.message = "Word must be less than 16 characters long!"
+            if len(word) > PUZZLE_WIDTH:
+                user_state.message = f"Word must be less than {PUZZLE_WIDTH + 1} characters long!"
                 return
             add_word(word)
             if not word.upper() in user_state.selected and word.upper() in user_state.get_words_from_puzzle():
