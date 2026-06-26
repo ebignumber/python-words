@@ -16,12 +16,15 @@ class State:
     def get_words_matching_regexp(self, regexp):
         words = list(self.puzzle.keys())
         matches = []
-        for word in words:
-            match_uppercase = re.search(regexp, word)
-            match_lowercase = re.search(regexp, word.lower())
-            if match_uppercase or match_lowercase:
-                matches.append(word)
-        return matches
+        try:
+            for word in words:
+                match_uppercase = re.search(regexp, word)
+                match_lowercase = re.search(regexp, word.lower())
+                if match_uppercase or match_lowercase:
+                    matches.append(word)
+            return matches
+        except re.PatternError:
+            return []
 
 #Displays the puzzle and gives details about it
 def display_puzzle(puzzle):
