@@ -332,6 +332,8 @@ def input_string(message, behavior):
     return input_str
 
 def read_input(user_input):
+    try: user_input = chr(user_input);
+    except ValueError: return;
     match user_input:
     #WORD COMMANDS
         case 'a':
@@ -435,6 +437,6 @@ while True:
     stdscr.addstr(23, 0, "")
     try:
         key = stdscr.getch()
-        read_input(chr(key))
+        read_input(key)
     except KeyboardInterrupt:
         user_state.message = "Press 'q' to exit the program"
