@@ -289,6 +289,8 @@ def input_string(message, behavior):
     else:
         tab_array = []
     input_str = r''
+    formated_message = f"{message}: > "
+    cursor_location = 0
     times_pressed_tab = -1
     puzzle = user_state.puzzle
     while True:
@@ -296,37 +298,42 @@ def input_string(message, behavior):
         stdscr.addstr(display_puzzle(puzzle))
         stdscr.addstr(f"SERIES: {user_state.series}\n")
         stdscr.addstr(f"{user_state.message}\n\n")
-        stdscr.addstr(22, 0, f"\n{message}: ")
-
-        stdscr.addstr("> " + input_str)
+        stdscr.addstr(23, 0, formated_message + input_str)
+        stdscr.addstr(23, len(formated_message) + cursor_location, '')
         stdscr.refresh()
         if behavior == 'regexp':
             for i in user_state.get_words_matching_regexp(input_str):
                 print_bold_word(i)
-            stdscr.addstr(23, len(message) + 4 + len(input_str), '')
+            stdscr.addstr(23, len(formated_message) + cursor_location, '')
         elif behavior == 'words':
             if input_str.upper() in user_state.puzzle:
                 print_bold_word(input_str.upper())
-                stdscr.addstr(23, len(message) + 4 + len(input_str), '')
+            stdscr.addstr(23, len(formated_message) + cursor_location, '')
         key = stdscr.getch()
         
-        if key == curses.KEY_BACKSPACE or key == 127:
-            input_str = input_str[:-1]
+        if (key == curses.KEY_BACKSPACE or key == 127) and cursor_location > 0:
+            input_str = input_str[:cursor_location - 1] + input_str[cursor_location:]
+            cursor_location -= 1
         elif key == ord('\n'):
             break
         elif key == ord('\t'):
             if(tab_array):
                 times_pressed_tab += 1
                 input_str = tab_array[times_pressed_tab % len(tab_array)]
+                cursor_location = len(input_str)
                 if(behavior == "puzzles"):
                     user_state.message = f"There are {len(tab_array)} puzzles in this series"
                     with open(f'{user_state.get_puzzle_path()}{tab_array[times_pressed_tab % len(tab_array)] }.json', 'r') as f:
                         puzzle = json.load(f)
         elif key == 27: #27 is for the escape key
             return ''
+        elif key == curses.KEY_LEFT and not cursor_location == 0:
+            cursor_location -= 1
+        elif key == curses.KEY_RIGHT and cursor_location < len(input_str):
+            cursor_location += 1
         elif 0 <= key <= 255:
-            input_str += chr(key)
-
+            input_str = input_str[:cursor_location] + chr(key) + input_str[cursor_location:]
+            cursor_location += 1
         user_state.get_words_matching_regexp(input_str)
         stdscr.clear()
         stdscr.addstr(f"{message}:\n")
